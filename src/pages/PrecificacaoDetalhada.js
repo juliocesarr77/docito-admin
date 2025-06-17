@@ -4,8 +4,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { collection, onSnapshot, query, orderBy, doc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
-// Ícone ShoppingBag adicionado para corrigir o erro
-import { ArrowLeft, PlusCircle, Trash2, HelpCircle, TrendingUp, TrendingDown, PieChart, Briefcase, FileText, Save, Edit, FilePlus, AlertTriangle, Scale, ShoppingBag, Clock, Hash } from 'lucide-react';
+// Ícones 100% limpos e revisados
+import { ArrowLeft, PlusCircle, Trash2, HelpCircle, TrendingUp, TrendingDown, PieChart, FileText, Save, FilePlus, AlertTriangle, Scale, ShoppingBag } from 'lucide-react';
 import './PrecificacaoDetalhada.css';
 
 const initialState = {
@@ -55,10 +55,7 @@ function PrecificacaoDetalhada() {
     const handlePrecoChange = (key, valor) => handleFormChange('meusPrecos', { ...formState.meusPrecos, [key]: valor });
 
     const handleSaveOrUpdate = async () => {
-        if (!db || !formState.nome) {
-            alert('Por favor, dê um nome para a sua precificação.');
-            return;
-        }
+        if (!db || !formState.nome) { alert('Por favor, dê um nome para a sua precificação.'); return; }
         const dataToSave = { ...formState };
         delete dataToSave.id;
 
@@ -73,9 +70,7 @@ function PrecificacaoDetalhada() {
 
     const handleLoad = (id) => {
         const precificacaoCarregada = precificacoesSalvas.find(p => p.id === id);
-        if (precificacaoCarregada) {
-            setFormState({ ...initialState, ...precificacaoCarregada, id });
-        }
+        if (precificacaoCarregada) { setFormState({ ...initialState, ...precificacaoCarregada, id }); }
     };
     
     const handleDelete = async () => {
@@ -120,7 +115,7 @@ function PrecificacaoDetalhada() {
         const lucroRealEmpresa = lucroRealTotal * ((parseFloat(pctLucroEmpresa) || 0) / 100);
         const lucroRealSalario = lucroRealTotal - lucroRealEmpresa;
 
-        return { custoTotalReceita, valorCustoFixo, custoProducao, lucroSugerido, tabelaPrecos, lucroRealTotal, lucroRealEmpresa, lucroRealSalario, valorVendaSugerido };
+        return { custoTotalReceita, valorCustoFixo, custoProducao, lucroSugerido, tabelaPrecos, lucroRealTotal, lucroRealEmpresa, lucroRealSalario, valorVendaSugerido, custoPorUnidade };
     }, [formState, insumosDisponiveis]);
 
     if (authLoading || loading) return <div className="p-8 text-center">Carregando...</div>;
@@ -142,7 +137,6 @@ function PrecificacaoDetalhada() {
                         </div>
                     </div>
                 </div>
-
                 <div className="space-y-6">
                     <div className="card">
                         <h2 className="card-title">Custos e Sugestão de Preço</h2>
@@ -151,7 +145,7 @@ function PrecificacaoDetalhada() {
                             <div className="linha-calculo"><label className="label"><HelpCircle size={14}/> Custos Fixos/Variáveis</label><div className="input-group"><input type="number" value={formState.pctCustoFixo} onChange={e => handleFormChange('pctCustoFixo', e.target.value)}/><span className="text-gray-500">%</span></div></div>
                             <div className="linha-calculo linha-total"><p className="label">Custo Total de Produção</p><p className="valor">{calculos.custoProducao.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</p></div>
                             <div className="linha-calculo"><label className="label"><PieChart size={14}/> Margem de Lucro Sugerida</label><div className="input-group"><input type="number" value={formState.pctLucroGeral} onChange={e => handleFormChange('pctLucroGeral', e.target.value)}/><span className="text-gray-500">%</span></div></div>
-                            <div className="linha-calculo linha-destaque text-blue-600 !text-lg"><p>Preço de Venda Sugerido</p><p>{calculos.valorVendaSugerido.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</p></div>
+                            <div className="linha-calculo linha-destaque text-blue-600 !text-lg"><p>Preço de Venda Sugerido (Receita)</p><p>{calculos.valorVendaSugerido.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</p></div>
                         </div>
                     </div>
                     <div className="card">
