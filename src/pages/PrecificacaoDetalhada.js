@@ -4,8 +4,11 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { collection, onSnapshot, query, orderBy, doc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
-// Ícones 100% limpos e revisados
-import { ArrowLeft, PlusCircle, Trash2, HelpCircle, TrendingUp, TrendingDown, PieChart, FileText, Save, FilePlus, AlertTriangle, Scale, ShoppingBag } from 'lucide-react';
+// IMPORTAÇÕES 100% REVISADAS E LIMPAS
+import { 
+    ArrowLeft, PlusCircle, Trash2, HelpCircle,
+    PieChart, FileText, Save, FilePlus, AlertTriangle, ShoppingBag 
+} from 'lucide-react';
 import './PrecificacaoDetalhada.css';
 
 const initialState = {
@@ -55,7 +58,7 @@ function PrecificacaoDetalhada() {
     const handlePrecoChange = (key, valor) => handleFormChange('meusPrecos', { ...formState.meusPrecos, [key]: valor });
 
     const handleSaveOrUpdate = async () => {
-        if (!db || !formState.nome) { alert('Por favor, dê um nome para a sua precificação.'); return; }
+        if (!db || !formState.nome || formState.nome === 'Nova Precificação') { alert('Por favor, dê um nome para a sua precificação.'); return; }
         const dataToSave = { ...formState };
         delete dataToSave.id;
 
@@ -115,7 +118,7 @@ function PrecificacaoDetalhada() {
         const lucroRealEmpresa = lucroRealTotal * ((parseFloat(pctLucroEmpresa) || 0) / 100);
         const lucroRealSalario = lucroRealTotal - lucroRealEmpresa;
 
-        return { custoTotalReceita, valorCustoFixo, custoProducao, lucroSugerido, tabelaPrecos, lucroRealTotal, lucroRealEmpresa, lucroRealSalario, valorVendaSugerido, custoPorUnidade };
+        return { custoTotalReceita, valorCustoFixo, custoProducao, lucroSugerido, tabelaPrecos, lucroRealTotal, lucroRealEmpresa, lucroRealSalario, valorVendaSugerido };
     }, [formState, insumosDisponiveis]);
 
     if (authLoading || loading) return <div className="p-8 text-center">Carregando...</div>;
