@@ -1,0 +1,428 @@
+/* src/pages/ProdutosPrecificados.css (Estilo LUXO) */
+
+/* Definindo a paleta de cores para um toque de luxo e profissionalismo */
+:root {
+    --cor-fundo-geral: #FDFBFA; /* Um creme muito suave, quase branco */
+    --cor-card-fundo: #FFFFFF;
+    --cor-borda-card: #E8E2DA; /* Borda mais quente e suave */
+    --cor-texto-titulo: #36261B; /* Marrom escuro profundo */
+    --cor-texto-principal: #5C4F42; /* Marrom médio para textos */
+    --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
+    
+    --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
+    --cor-primaria-hover: #C59A67; /* Dourado mais claro para hover */
+    --cor-primaria-claro: #F5E8D8; /* Fundo claro para botões/destaque */
+
+    --cor-sucesso: #5FA85D; /* Verde orgânico e suave */
+    --cor-alerta: #E6B800; /* Amarelo ouro para avisos */
+    --cor-erro: #D9534F; /* Vermelho mais contido */
+    --cor-info: #5BC0DE; /* Azul suave */
+
+    --sombra-card: 0 6px 20px rgba(0, 0, 0, 0.08); /* Sombra mais pronunciada e elegante */
+    --sombra-card-hover: 0 12px 30px rgba(0, 0, 0, 0.15); /* Sombra mais forte no hover */
+}
+
+/* Base global */
+body {
+    background-color: var(--cor-fundo-geral);
+}
+
+.catalogo-container {
+    background-color: var(--cor-fundo-geral);
+    min-height: 100vh;
+    padding: 2.5rem; /* Mais espaçamento para "respirar" */
+    font-family: 'Georgia', serif; /* Fonte serifada para elegância */
+    color: var(--cor-texto-principal);
+}
+
+.catalogo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem; /* Mais espaço */
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--cor-borda-card); /* Linha divisória sutil */
+}
+
+.catalogo-header-title {
+    font-size: 2.8rem; /* Título bem grande e impactante */
+    font-weight: 700;
+    color: var(--cor-texto-titulo);
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Espaço maior para o ícone */
+    letter-spacing: -0.02em; /* Pequeno ajuste no espaçamento entre letras */
+}
+
+.catalogo-header-title svg {
+    color: var(--cor-primaria); /* Ícone no tom dourado/cobre */
+    font-size: 3.2rem; /* Ícone maior */
+}
+
+/* Botões de Ação */
+.btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    color: var(--cor-texto-secundario); /* Cor mais neutra para o voltar */
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    text-decoration: none; /* Remove sublinhado padrão */
+}
+.btn-voltar:hover {
+    color: var(--cor-primaria); /* Dourado no hover */
+    transform: translateX(-3px);
+}
+.btn-voltar svg {
+    margin-right: 0.5rem;
+    color: var(--cor-texto-secundario);
+}
+
+.btn-primary {
+    display: flex;
+    align-items: center;
+    background-color: var(--cor-primaria);
+    color: white;
+    font-weight: 600;
+    padding: 0.8rem 1.8rem; /* Botão mais robusto */
+    border-radius: 0.75rem; /* Bordas mais suaves */
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.btn-primary:hover {
+    background-color: var(--cor-primaria-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+.btn-primary:disabled {
+    background-color: var(--cor-primaria-claro); /* Cor clara e dessaturada quando desabilitado */
+    color: var(--cor-texto-secundario);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+.btn-primary svg {
+    margin-right: 0.6rem;
+}
+
+/* Grid de cards de produtos */
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Cards ligeiramente maiores */
+    gap: 2rem; /* Mais espaço entre cards */
+    margin-bottom: 3rem;
+}
+
+/* Card individual do produto */
+.produto-card {
+    background-color: var(--cor-card-fundo);
+    border: 1px solid var(--cor-borda-card);
+    border-radius: 1rem; /* Bordas bem arredondadas para um toque premium */
+    box-shadow: var(--sombra-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 2rem; /* Mais padding interno */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.produto-card:hover {
+    transform: translateY(-8px); /* Efeito de "levantar" mais pronunciado */
+    box-shadow: var(--sombra-card-hover);
+}
+
+.produto-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.produto-card-title {
+    font-size: 1.8rem; /* Nome do produto em destaque */
+    font-weight: 700;
+    color: var(--cor-texto-titulo);
+    line-height: 1.3;
+    flex-grow: 1;
+    margin-right: 0.75rem;
+}
+
+.produto-card-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-icon {
+    background: var(--cor-fundo-geral); /* Fundo sutil */
+    border: 1px solid var(--cor-borda-card);
+    border-radius: 50%; /* Botões de ícone circulares */
+    cursor: pointer;
+    padding: 0.7rem; /* Aumenta a área de clique */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.btn-icon:hover {
+    background-color: var(--cor-primaria-claro); /* Fundo dourado claro no hover */
+}
+.btn-icon svg {
+    color: var(--cor-texto-secundario); /* Cor padrão dos ícones */
+    font-size: 1.2rem; /* Ícones um pouco maiores */
+}
+.btn-icon.edit:hover svg { color: var(--cor-info); } /* Azul para editar */
+.btn-icon.delete:hover svg { color: var(--cor-erro); } /* Vermelho para deletar */
+
+.produto-details {
+    flex-grow: 1;
+    margin-bottom: 1.5rem;
+}
+
+.produto-details p {
+    font-size: 1rem;
+    color: var(--cor-texto-principal);
+    margin-bottom: 0.3rem;
+}
+.produto-details p strong {
+    color: var(--cor-texto-titulo);
+}
+
+.ingredientes-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    border-top: 1px dashed var(--cor-borda-card);
+    padding-top: 1rem;
+}
+
+.ingredientes-list-title {
+    font-weight: 600;
+    color: var(--cor-texto-titulo);
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.ingredientes-list li {
+    font-size: 0.95rem;
+    color: var(--cor-texto-secundario);
+    margin-bottom: 0.3rem;
+    line-height: 1.4;
+}
+
+/* Seção de valores no rodapé do card */
+.produto-valores {
+    border-top: 1px solid var(--cor-borda-card);
+    padding-top: 1.5rem;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Mais espaço entre os itens de valor */
+}
+
+.produto-valor-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    color: var(--cor-texto-principal);
+}
+
+.produto-valor-item .label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+}
+
+.produto-valor-item .label svg {
+    color: var(--cor-primaria); /* Ícones nos valores em dourado */
+    font-size: 1.2rem;
+}
+
+.produto-valor-item .value {
+    font-weight: 700;
+    font-size: 1.3rem; /* Valores maiores e mais impactantes */
+    color: var(--cor-texto-titulo); /* Cor forte para o valor final */
+}
+
+/* Cores específicas para os valores (ajustadas para a paleta de luxo) */
+.valor-custo-total .value { color: #8B4513; } /* Marrom mais forte para custo total */
+.valor-custo-grama .value { color: var(--cor-erro); } /* Vermelho para custo por grama */
+.valor-preco-unidade .value { color: var(--cor-info); } /* Azul suave para preço sugerido por unidade */
+.valor-meu-preco .value { color: var(--cor-sucesso); } /* Verde suave para meu preço */
+.valor-lucro-real .value { color: var(--cor-primaria); } /* Dourado para o lucro real */
+
+
+/* Mensagem de nenhum produto */
+.no-produtos-message {
+    text-align: center;
+    padding: 4rem 2rem; /* Mais padding */
+    background-color: var(--cor-card-fundo);
+    border-radius: 1rem;
+    box-shadow: var(--sombra-card);
+}
+
+.no-produtos-message svg {
+    color: #D3C1B0; /* Tom pastel de dourado/marrom */
+    margin: 0 auto 1.5rem;
+    font-size: 4rem; /* Ícone grande */
+}
+
+.no-produtos-message h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--cor-texto-titulo);
+    margin-bottom: 0.75rem;
+}
+
+.no-produtos-message p {
+    color: var(--cor-texto-secundario);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+/* Estilos para o Modal de Confirmação (mantidos e ajustados sutilmente) */
+.fixed.inset-0 {
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo mais escuro para o modal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+.bg-white.p-8.rounded-lg.shadow-2xl {
+    background-color: var(--cor-card-fundo);
+    padding: 2.5rem; /* Mais padding */
+    border-radius: 1rem; /* Mais arredondado */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Sombra mais forte */
+    max-width: 28rem; /* Um pouco mais largo */
+    width: 100%;
+    margin: 0 1.5rem;
+    border: 1px solid var(--cor-borda-card); /* Borda no modal */
+}
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.text-yellow-500 { color: var(--cor-alerta); }
+.mt-4 { margin-top: 1rem; }
+.text-xl { font-size: 1.35rem; }
+.font-bold { font-weight: 700; }
+.text-gray-800 { color: var(--cor-texto-titulo); }
+.mt-2 { margin-top: 0.6rem; }
+.text-gray-600 { color: var(--cor-texto-principal); }
+.text-xs { font-size: 0.8rem; }
+.text-gray-400 { color: var(--cor-texto-secundario); }
+.mt-1 { margin-top: 0.25rem; }
+.mt-8 { margin-top: 2rem; }
+.flex { display: flex; }
+.justify-center { justify-content: center; }
+.gap-4 { gap: 1rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.bg-gray-200 { background-color: #e5e7eb; }
+.text-gray-800 { color: #1f2937; }
+.rounded-md { border-radius: 0.375rem; }
+.hover\:bg-gray-300:hover { background-color: #d1d5db; }
+.font-semibold { font-weight: 600; }
+.bg-red-600 { background-color: var(--cor-erro); }
+.text-white { color: white; }
+.hover\:bg-red-700:hover { background-color: #b91c1c; }
+
+/* Media Queries para Responsividade (ajustadas para as novas escalas) */
+@media (max-width: 1024px) { /* Laptops menores */
+    .catalogo-container {
+        padding: 2rem;
+    }
+    .catalogo-header-title {
+        font-size: 2.2rem;
+    }
+    .catalogo-header-title svg {
+        font-size: 2.5rem;
+    }
+    .produtos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    .produto-card-title {
+        font-size: 1.6rem;
+    }
+    .produto-valor-item .value {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) { /* Tablets e Mobile */
+    .catalogo-container {
+        padding: 1.5rem;
+    }
+    .catalogo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .catalogo-header-title {
+        font-size: 1.8rem;
+        text-align: left;
+    }
+    .catalogo-header-title svg {
+        font-size: 2rem;
+    }
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+    }
+    .produtos-grid {
+        grid-template-columns: 1fr; /* Uma coluna em telas menores */
+        gap: 1.25rem;
+    }
+    .produto-card {
+        padding: 1.5rem;
+    }
+    .produto-card-title {
+        font-size: 1.4rem;
+    }
+    .produto-details p, .ingredientes-list li {
+        font-size: 0.9rem;
+    }
+    .produto-valor-item {
+        font-size: 1rem;
+    }
+    .produto-valor-item .value {
+        font-size: 1.1rem;
+    }
+    .no-produtos-message {
+        padding: 2.5rem 1rem;
+    }
+    .no-produtos-message h3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) { /* Celulares menores */
+    .catalogo-container {
+        padding: 1rem;
+    }
+    .catalogo-header-title {
+        font-size: 1.5rem;
+    }
+    .catalogo-header-title svg {
+        font-size: 1.8rem;
+    }
+    .produto-card {
+        padding: 1rem;
+    }
+    .produto-card-title {
+        font-size: 1.25rem;
+    }
+    .produto-details p, .ingredientes-list li {
+        font-size: 0.85rem;
+    }
+    .ingredientes-list-title {
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,181 @@
+/* src/pages/Pedidos.css */
+
+.dashboard-container {
+  padding: 1.5rem 2rem;
+  background-color: #fffaf5;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #5a2a0c;
+}
+
+.status-table {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.status-table button {
+  font-family: Arial, sans-serif;
+  padding: 0.8rem;
+  border: 1px solid #ffe0cc;
+  border-radius: 8px;
+  min-width: 160px;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.status-table button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.status-cell.pendente { background-color: #ffcdd2; }
+.status-cell.em-producao { background-color: #bbdefb; }
+.status-cell.pronto { background-color: #fff9c4; }
+.status-cell.entregue { background-color: #c8e6c9; }
+.status-cell.ativo {
+    font-weight: bold;
+    border: 2px solid #5a2a0c;
+}
+
+
+.status-count {
+  font-weight: bold;
+  color: #e65100;
+}
+
+.card-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.pedido-card {
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  border: 1px solid #ffe0cc;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
+  padding: 1.25rem;
+  border-radius: 8px;
+}
+
+.pedido-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.cliente-nome {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #5a2a0c;
+}
+
+.dashboard-search {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.dashboard-search input {
+  font-family: Arial, sans-serif;
+  width: 100%;
+  max-width: 500px;
+  padding: 0.75rem;
+  border: 1px solid #ffe0cc;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #5a2a0c;
+}
+
+/* CORREÇÃO: Botões de ação */
+.action-buttons {
+    display: flex;
+    flex-direction: row; /* Voltam a ficar lado a lado */
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.home-button-editar,
+.home-button-excluir,
+.home-button-avancar {
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-button-editar { background-color: #E8F5E9; color: #388E3C; }
+.home-button-editar:hover { background-color: #C8E6C9; }
+.home-button-excluir { background-color: #FFEBEE; color: #D32F2F; }
+.home-button-excluir:hover { background-color: #FFCDD2; }
+.home-button-avancar { background-color: #E3F2FD; color: #1976D2; }
+.home-button-avancar:hover { background-color: #BBDEFB; }
+
+.dashboard-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.dashboard-pagination button {
+  font-family: Arial, sans-serif;
+  background-color: #ffe0b2;
+  color: #bf360c;
+  border: 1px solid #ffe0cc;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.dashboard-pagination button:hover { background-color: #ffb347; }
+.dashboard-pagination button.active {
+  background-color: #bf360c;
+  color: white;
+  font-weight: bold;
+}
+
+/* CORREÇÃO: Notificação de dias */
+.data-entrega-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Permite quebrar se não couber */
+    gap: 0.5rem;
+}
+.dias-entrega {
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 12px;
+    color: white;
+    white-space: nowrap; /* Impede que o texto interno quebre */
+}
+.dias-entrega.urgente { background-color: #D32F2F; }
+.dias-entrega.atencao { background-color: #FFA000; }
+.dias-entrega.tranquilo { background-color: #388E3C; }

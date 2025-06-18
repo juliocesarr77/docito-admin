@@ -1,0 +1,88 @@
+/* src/pages/CadastroPedido.css */
+
+.cadastro-container {
+    padding: 100px 60px;
+    background-color: #fffaf5;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* ... e todo o resto do seu CSS original ... */
+.cadastro-form {
+    max-width: 900px;
+    width: 90%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 60px;
+    border-radius: 30px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+.cadastro-label {
+    display: block;
+    margin-bottom: 10px;
+    color: #5a2a0c;
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+.cadastro-input {
+    width: 100%;
+    padding: 18px;
+    margin-bottom: 25px;
+    border-radius: 22px;
+    border: 2px solid #ffe0cc;
+    font-size: 1.4rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+.cadastro-input:focus {
+    border-color: #ffb347;
+    outline: none;
+    box-shadow: 0 0 12px rgba(255, 179, 71, 0.5);
+}
+.cadastro-botao {
+    background-color: #ff6b6b;
+    color: #fff;
+    border: none;
+    padding: 18px 28px;
+    font-size: 1.4rem;
+    border-radius: 22px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 70%;
+    align-self: center;
+}
+.cadastro-botao:hover {
+    background-color: #e05b5b;
+}
+.notificacao {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 20px;
+    border-radius: 6px;
+    z-index: 1000;
+    font-weight: bold;
+}
+.notificacao.sucesso {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.notificacao.erro {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+@media (max-width: 768px) {
+    .cadastro-container { padding: 60px 30px; }
+    .cadastro-form { padding: 30px; }
+    .cadastro-titulo { font-size: 3rem; margin-bottom: 40px; }
+    .cadastro-label { font-size: 1.4rem; }
+    .cadastro-input { padding: 14px; font-size: 1.2rem; margin-bottom: 20px; }
+    .cadastro-botao { padding: 14px 24px; font-size: 1.2rem; width: 90%; }
+}
