@@ -5,13 +5,17 @@ import { useAuth } from '../context/AuthContext';
 import { collection, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy as firebaseOrderBy, addDoc, serverTimestamp } from 'firebase/firestore'; 
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Pencil, Trash, ArrowUp, Clock, Factory, PackageCheck, CheckCircle, DollarSign, PiggyBank, Eye, HelpCircle, Palette } from 'lucide-react'; 
+// Removido 'Printer' e mantido 'Download'
+import { Pencil, Trash, ArrowUp, Clock, Factory, PackageCheck, CheckCircle, DollarSign, PiggyBank, Eye, HelpCircle, Palette, Download } from 'lucide-react'; 
 import './Pedidos.css';
 import { format, differenceInDays, parseISO } from 'date-fns'; 
 import { ptBR } from 'date-fns/locale';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+// Importa a biblioteca html2pdf
+import html2pdf from 'html2pdf.js';
 
 const Pedidos = () => {
     const { db } = useAuth();
@@ -64,7 +68,7 @@ const Pedidos = () => {
             atualizarStatusNoFirebase(pedido.id, 'pendente', pedido);
         } 
         else if (proximo === 'entregue') {
-            if (pedido.statusPagamento === 'Pago' || !pedido.statusPagamento || pedido.saldoDevedor <= 0) { // Adicionado saldoDevedor <= 0
+            if (pedido.statusPagamento === 'Pago' || !pedido.statusPagamento || (pedido.saldoDevedor || 0) <= 0) { 
                 console.log('Pedido já pago ou sem status de pagamento. Avançando diretamente para Entregue.');
                 atualizarStatusNoFirebase(pedido.id, proximo, pedido);
             } 
@@ -106,7 +110,6 @@ const Pedidos = () => {
                 updateData.dataPagamento = serverTimestamp(); 
                 updateData.formaPagamento = formaPagamento; 
 
-                // Força o status de pagamento para 'Pago' ao entregar
                 updateData.statusPagamento = 'Pago';
                 updateData.valorPago = parseFloat(pedidoAtual.valor) || 0; 
                 updateData.saldoDevedor = 0;
@@ -231,6 +234,132 @@ const Pedidos = () => {
         }
     };
 
+    // FUNÇÃO ATUALIZADA: para gerar o PDF do pedido (COMPACTO)
+    const generatePdfForOrder = (pedido) => {
+        // Estilos CSS embutidos para um visual compacto e limpo
+        const pdfStyles = `
+            <style>
+                body { 
+                    font-family: 'Helvetica Neue', Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
+                    box-sizing: border-box; 
+                    font-size: 10px; /* Fonte base ainda menor */
+                    color: #333;
+                    line-height: 1.3;
+                }
+                .pdf-container { 
+                    width: 250px; /* Largura reduzida para parecer um cupom/comprovante */
+                    padding: 10px; /* Padding menor */
+                    border: 1px dashed #ddd; /* Borda tracejada suave */
+                    box-sizing: border-box; 
+                    margin: 0 auto; 
+                }
+                .pdf-header { 
+                    text-align: center; 
+                    margin-bottom: 10px; /* Margem menor */
+                    border-bottom: 1px solid #bbb; /* Linha sólida mais discreta */
+                    padding-bottom: 8px; /* Padding menor */
+                }
+                .pdf-header h1 { 
+                    font-size: 16px; /* Título menor */
+                    color: #A87D4B; 
+                    margin: 0; 
+                    font-weight: bold;
+                }
+                .pdf-section { 
+                    margin-bottom: 10px; /* Margem menor */
+                    padding-bottom: 8px; /* Padding menor */
+                    border-bottom: 1px dashed #eee; 
+                }
+                .pdf-section h2 { 
+                    font-size: 12px; /* Título de seção menor */
+                    color: #5C4F42; 
+                    margin: 0 0 5px 0; /* Margem ajustada */
+                    font-weight: bold; 
+                }
+                .pdf-section p { margin: 0 0 2px 0; } /* Margem muito pequena para parágrafos */
+                .pdf-section strong { color: #36261B; font-weight: bold; }
+                .pdf-final-info { text-align: center; margin-top: 15px; font-size: 9px; color: #8B7A6C; }
+                .pdf-id { font-size: 8px; text-align: center; margin-top: 3px; color: #8B7A6C; }
+
+                /* Estilos para alinhar como no card do site (simulado) */
+                .info-line { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2px; }
+                .info-label { font-weight: bold; margin-right: 5px; color: #36261B; }
+                .info-value { text-align: right; flex-grow: 1; }
+                .info-value.bold { font-weight: bold; }
+            </style>
+        `;
+
+        // Conteúdo HTML que será convertido para PDF
+        const contentHtml = `
+            <div class="pdf-container">
+                <div class="pdf-header">
+                    <h1>ORDEM DE SERVIÇO</h1>
+                    <p style="font-size: 10px; margin: 5px 0 0 0;">Pedido #${pedido.id.substring(0, 8).toUpperCase()}</p>
+                </div>
+
+                <div class="pdf-section">
+                    <h2>CLIENTE</h2>
+                    <p><strong>Nome:</strong> ${pedido.nome}</p>
+                    <p><strong>Tel:</strong> ${pedido.telefone || 'N/A'}</p>
+                    <p><strong>Endereço:</strong> ${pedido.endereco || 'N/A'}, ${pedido.numero || 'N/A'}</p>
+                    <p><strong>Ref:</strong> ${pedido.pontoReferencia || 'N/A'}</p>
+                </div>
+
+                <div class="pdf-section">
+                    <h2>PEDIDO</h2>
+                    <p><strong>Prod(s):</strong> ${pedido.produto || 'N/A'}</p>
+                    <p><strong>Cor Forminha:</strong> ${pedido.corForminha || 'N/A'}</p>
+                    <p><strong>Obs:</strong> ${pedido.observacoes || 'N/A'}</p>
+                </div>
+
+                <div class="pdf-section">
+                    <h2>VALORES</h2>
+                    <div class="info-line">
+                        <span class="info-label">Valor Total:</span>
+                        <span class="info-value bold">${parseFloat(pedido.valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>
+                    <p><strong>Pagamento:</strong> ${pedido.statusPagamento || 'N/A'}</p>
+                    ${pedido.statusPagamento !== 'Pendente' ? `
+                    <div class="info-line">
+                        <span class="info-label">Valor Pago:</span>
+                        <span class="info-value">${parseFloat(pedido.valorPago || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>` : ''}
+                    ${pedido.statusPagamento !== 'Pago' && (pedido.saldoDevedor || 0) > 0 ? `
+                    <div class="info-line">
+                        <span class="info-label">Saldo Dev.:</span>
+                        <span class="info-value">${parseFloat(pedido.saldoDevedor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>` : ''}
+                    ${pedido.formaPagamento ? `<p><strong>Via:</strong> ${pedido.formaPagamento}</p>` : ''}
+                </div>
+
+                <div class="pdf-section">
+                    <h2>ENTREGA</h2>
+                    <p><strong>Data:</strong> ${pedido.dataEntrega ? format(parseISO(pedido.dataEntrega), 'dd/MM/yyyy', { locale: ptBR }) : 'N/A'}</p>
+                    <p><strong>Hora:</strong> ${pedido.horaEntrega || 'N/A'}</p>
+                    <p><strong>Status Pedido:</strong> ${pedido.status || 'N/A'}</p>
+                </div>
+
+                <p class="pdf-final-info">Obrigado por sua preferência!</p>
+            </div>
+        `;
+
+        // Combina estilos e conteúdo
+        const fullContent = pdfStyles + contentHtml;
+
+        const opt = {
+            margin:       [3, 3, 3, 3], // Margens ainda menores para economizar espaço
+            filename:     `docito_pedido_${pedido.nome.replace(/\s/g, '_').toLowerCase().substring(0, 10)}_${pedido.id.substring(0, 5)}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 3, useCORS: true }, // Aumenta a escala para melhor qualidade em tamanhos pequenos
+            jsPDF:        { unit: 'mm', format: [80, 150], orientation: 'portrait' } // Formato de cupom: 80mm de largura por 150mm de altura
+        };
+
+        html2pdf().from(fullContent).set(opt).save();
+        toast.success('PDF do pedido gerado com sucesso!');
+    };
+
     return (
         <div className="dashboard-container">
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
@@ -303,6 +432,10 @@ const Pedidos = () => {
                                         <button onClick={() => excluirPedido(pedido.id)} className="home-button-excluir" title="Excluir Pedido" disabled={isUpdatingStatus}><Trash size={16} /></button>
                                         <button onClick={() => handleAtualizarStatusClick(pedido)} className="home-button-avancar" title="Avançar status" disabled={isUpdatingStatus}>
                                             <ArrowUp size={16} />
+                                        </button>
+                                        {/* NOVO BOTÃO: Gerar PDF */}
+                                        <button onClick={() => generatePdfForOrder(pedido)} className="home-button-pdf" title="Gerar PDF do Pedido" disabled={isUpdatingStatus}>
+                                            <Download size={16} />
                                         </button>
                                     </div>
                                 </div>
