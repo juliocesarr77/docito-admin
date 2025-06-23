@@ -1,181 +1,520 @@
 /* src/pages/Pedidos.css */
 
+/* Cores e fontes para o tema luxuoso (coerente com o dashboard e precificação) */
+:root {
+  --cor-fundo-pagina: #FDFBFA; /* Quase branco, suave */
+  --cor-card-fundo: #FFFFFF;
+  --cor-borda: #E8E2DA; /* Borda mais quente e suave */
+  --cor-texto-principal: #36261B; /* Marrom escuro profundo */
+  --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
+  
+  --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
+  --cor-primaria-hover: #C59A67; /* Dourado mais claro para hover */
+  --cor-primaria-claro: #F5E8D8; /* Fundo claro para botões/destaque */
+
+  --cor-sucesso: #5FA85D; /* Verde orgânico e suave */
+  --cor-erro: #D9534F; /* Vermelho mais contido */
+  --cor-alerta: #E6B800; /* Amarelo ouro para avisos */
+  --cor-info: #5BC0DE; /* Azul suave */
+  --cor-orange: #FFA000; /* Laranja para status "Atenção" */
+
+  --sombra-card: 0 6px 20px rgba(0, 0, 0, 0.08); /* Sombra elegante */
+  --sombra-hover: 0 8px 15px rgba(0, 0, 0, 0.15);
+  --sombra-modal: 0 15px 30px rgba(0,0,0,0.3); /* Sombra para modais */
+}
+
+body {
+  background-color: var(--cor-fundo-pagina);
+  font-family: 'Georgia', serif; /* Coerente com as outras páginas */
+  color: var(--cor-texto-principal);
+}
+
 .dashboard-container {
-  padding: 1.5rem 2rem;
-  background-color: #fffaf5;
+  padding: 2.5rem;
+  background-color: var(--cor-fundo-pagina);
   min-height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: 'Georgia', serif;
+  color: var(--cor-texto-principal);
 }
 
 .dashboard-title {
   text-align: center;
-  font-size: 1.75rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  color: #5a2a0c;
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  color: var(--cor-texto-principal);
+  letter-spacing: -0.02em;
 }
 
 .status-table {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem; /* Mais espaço */
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem; /* Mais espaço entre botões de status */
 }
 
 .status-table button {
-  font-family: Arial, sans-serif;
-  padding: 0.8rem;
-  border: 1px solid #ffe0cc;
-  border-radius: 8px;
-  min-width: 160px;
+  font-family: 'Georgia', serif;
+  padding: 0.9rem 1.2rem; /* Mais padding */
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.75rem; /* Mais arredondado */
+  min-width: 170px;
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
-  background-color: white;
+  background-color: var(--cor-card-fundo);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  font-weight: 500;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  gap: 0.6rem;
+  font-weight: 600;
+  box-shadow: var(--sombra-leve);
+  color: var(--cor-texto-principal); /* Cor padrão do texto */
 }
 
 .status-table button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transform: translateY(-3px);
+  box-shadow: var(--sombra-media);
+  background-color: var(--cor-primaria-claro); /* Um fundo suave no hover */
 }
 
-.status-cell.pendente { background-color: #ffcdd2; }
-.status-cell.em-producao { background-color: #bbdefb; }
-.status-cell.pronto { background-color: #fff9c4; }
-.status-cell.entregue { background-color: #c8e6c9; }
+.status-table button svg {
+  color: var(--cor-texto-secundario); /* Cor padrão dos ícones nos botões de status */
+}
+
+/* Cores específicas para os botões de status e seus ícones */
+.status-cell.pendente { background-color: #ffe0cc; } /* Laranja claro */
+.status-cell.pendente svg { color: #BF360C; } /* Laranja escuro */
+
+.status-cell.em-producao { background-color: #bbdefb; } /* Azul claro */
+.status-cell.em-producao svg { color: #1976D2; } /* Azul escuro */
+
+.status-cell.pronto { background-color: #fff9c4; } /* Amarelo claro */
+.status-cell.pronto svg { color: #FBC02D; } /* Amarelo escuro */
+
+.status-cell.entregue { background-color: #c8e6c9; } /* Verde claro */
+.status-cell.entregue svg { color: #388E3C; } /* Verde escuro */
+
 .status-cell.ativo {
-    font-weight: bold;
-    border: 2px solid #5a2a0c;
+  font-weight: bold;
+  border: 2px solid var(--cor-primaria); /* Borda mais forte em dourado */
+  box-shadow: 0 0 0 4px rgba(168, 125, 75, 0.2); /* Sombra de foco em dourado */
+}
+.status-cell.ativo svg {
+  color: var(--cor-primaria); /* Ícone também em dourado quando ativo */
 }
 
 
 .status-count {
   font-weight: bold;
-  color: #e65100;
+  color: var(--cor-primaria); /* Cor do contador em dourado */
+  margin-left: 0.3rem;
 }
 
 .card-grid {
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem; /* Mais espaço entre cards */
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Cards maiores */
   list-style: none;
   padding: 0;
-  margin-top: 2rem;
+  margin-top: 2.5rem; /* Mais margem */
 }
 
 .pedido-card {
-  font-family: Arial, sans-serif;
-  background-color: #fff;
-  border: 1px solid #ffe0cc;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Georgia', serif;
+  background-color: var(--cor-card-fundo);
+  border: 1px solid var(--cor-borda);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: left;
-  padding: 1.25rem;
-  border-radius: 8px;
+  padding: 2rem; /* Mais padding */
+  border-radius: 1rem; /* Mais arredondado */
+  box-shadow: var(--sombra-card);
+  display: flex; /* Para flexbox interno */
+  flex-direction: column; /* Coloca itens um abaixo do outro */
 }
 
 .pedido-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transform: translateY(-8px); /* Efeito de "levantar" mais pronunciado */
+  box-shadow: var(--sombra-hover);
 }
 
+.pedido-card > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.pedido-card > div > div:first-child {
+  flex-grow: 1;
+  margin-right: 1.5rem; /* Espaçamento entre texto e botões */
+}
+
+
 .cliente-nome {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #5a2a0c;
+  font-size: 1.8rem; /* Nome do cliente maior */
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--cor-texto-principal);
 }
 
 .dashboard-search {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .dashboard-search input {
-  font-family: Arial, sans-serif;
+  font-family: 'Georgia', serif;
   width: 100%;
-  max-width: 500px;
-  padding: 0.75rem;
-  border: 1px solid #ffe0cc;
-  border-radius: 8px;
-  font-size: 1rem;
-  color: #5a2a0c;
+  max-width: 600px; /* Campo de busca maior */
+  padding: 0.9rem 1.2rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  color: var(--cor-texto-principal);
+  background-color: #fcfcfc;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sombra interna */
+  transition: all 0.2s ease;
+}
+.dashboard-search input:focus {
+  outline: none;
+  border-color: var(--cor-primaria-hover);
+  box-shadow: 0 0 0 3px rgba(168, 125, 75, 0.2);
 }
 
-/* CORREÇÃO: Botões de ação */
+/* Botões de ação do card (Editar, Excluir, Avançar) */
 .action-buttons {
-    display: flex;
-    flex-direction: row; /* Voltam a ficar lado a lado */
-    gap: 0.5rem;
-    align-items: center;
+  display: flex;
+  flex-direction: column; /* Coloca os botões um abaixo do outro */
+  gap: 0.75rem; /* Mais espaço entre eles */
+  align-items: center;
+  margin-left: 1rem; /* Garante que haja espaço à esquerda */
 }
 
 .home-button-editar,
 .home-button-excluir,
 .home-button-avancar {
-  border-radius: 8px;
-  width: 40px;
-  height: 40px;
+  border-radius: 50%; /* Botões circulares */
+  width: 48px; /* Maiores */
+  height: 48px; /* Maiores */
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  border: 1px solid #eee;
+  transition: all 0.3s ease;
+  border: 1px solid var(--cor-borda);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.home-button-editar { background-color: #E8F5E9; color: #388E3C; }
-.home-button-editar:hover { background-color: #C8E6C9; }
-.home-button-excluir { background-color: #FFEBEE; color: #D32F2F; }
-.home-button-excluir:hover { background-color: #FFCDD2; }
-.home-button-avancar { background-color: #E3F2FD; color: #1976D2; }
-.home-button-avancar:hover { background-color: #BBDEFB; }
+.home-button-editar { background-color: #E8F5E9; } /* Verde claro */
+.home-button-editar svg { color: #388E3C; } /* Verde escuro */
+.home-button-editar:hover { background-color: #C8E6C9; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
+.home-button-excluir { background-color: #FFEBEE; } /* Vermelho claro */
+.home-button-excluir svg { color: #D32F2F; } /* Vermelho escuro */
+.home-button-excluir:hover { background-color: #FFCDD2; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+.home-button-avancar { background-color: #E3F2FD; } /* Azul claro */
+.home-button-avancar svg { color: #1976D2; } /* Azul escuro */
+.home-button-avancar:hover { background-color: #BBDEFB; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+/* Paginação */
 .dashboard-pagination {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
+  gap: 0.75rem;
+  margin-top: 3rem; /* Mais margem */
+  padding-bottom: 2rem; /* Padding no final da página */
 }
 
 .dashboard-pagination button {
-  font-family: Arial, sans-serif;
-  background-color: #ffe0b2;
-  color: #bf360c;
-  border: 1px solid #ffe0cc;
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  font-family: 'Georgia', serif;
+  background-color: var(--cor-primaria-claro);
+  color: var(--cor-primaria);
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
 }
-.dashboard-pagination button:hover { background-color: #ffb347; }
+.dashboard-pagination button:hover { 
+  background-color: var(--cor-primaria); 
+  color: white; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
 .dashboard-pagination button.active {
-  background-color: #bf360c;
+  background-color: var(--cor-primaria);
   color: white;
   font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* CORREÇÃO: Notificação de dias */
+/* Notificação de dias */
 .data-entrega-container {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap; /* Permite quebrar se não couber */
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; 
+  gap: 0.5rem;
 }
 .dias-entrega {
-    font-size: 0.75rem;
-    font-weight: bold;
-    padding: 3px 8px;
-    border-radius: 12px;
-    color: white;
-    white-space: nowrap; /* Impede que o texto interno quebre */
+  font-size: 0.8rem; /* Tamanho ajustado */
+  font-weight: bold;
+  padding: 4px 10px; /* Mais padding */
+  border-radius: 16px; /* Mais arredondado */
+  color: white;
+  white-space: nowrap; 
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-.dias-entrega.urgente { background-color: #D32F2F; }
-.dias-entrega.atencao { background-color: #FFA000; }
-.dias-entrega.tranquilo { background-color: #388E3C; }
+.dias-entrega.urgente { background-color: var(--cor-erro); } /* Vermelho */
+.dias-entrega.atencao { background-color: var(--cor-alerta); } /* Amarelo/Laranja */
+.dias-entrega.tranquilo { background-color: var(--cor-sucesso); } /* Verde */
+
+/* Estilos para as informações de pagamento nos cards */
+.text-green-600 { color: var(--cor-sucesso); }
+.text-orange-500 { color: var(--cor-orange); }
+.text-red-600 { color: var(--cor-erro); }
+.text-gray-700 { color: var(--cor-texto-principal); }
+.text-gray-600 { color: var(--cor-texto-secundario); }
+.capitalize { text-transform: capitalize; }
+.font-bold { font-weight: 700; }
+.inline { display: inline; }
+.mr-1 { margin-right: 0.25rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+
+/* ------------------- MODAL DE PAGAMENTO ------------------- */
+.fixed.inset-0 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.65); /* Fundo mais escuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Garante que o modal esteja acima de tudo */
+  backdrop-filter: blur(5px); /* Efeito de desfoque (moderno) */
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl {
+  background-color: var(--cor-card-fundo);
+  padding: 2.5rem; /* Mais padding */
+  border-radius: 1rem; /* Mais arredondado */
+  box-shadow: var(--sombra-modal); /* Sombra mais elegante */
+  max-width: 28rem; /* Ligeiramente mais largo */
+  width: 90%; /* Responsivo */
+  margin: 0 1rem; /* Margem lateral em mobile */
+  text-align: center;
+  border: 1px solid var(--cor-borda); /* Borda sutil */
+  transform: scale(1); /* Garante que não haja transformação inicial para evitar problemas */
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Transição para abertura */
+  opacity: 1; /* Garante que a opacidade seja 1 */
+  animation: fadeInScaleUp 0.3s ease-out forwards; /* Adiciona animação de entrada */
+}
+
+/* Animação para o modal aparecer */
+@keyframes fadeInScaleUp {
+  from {
+      opacity: 0;
+      transform: scale(0.9);
+  }
+  to {
+      opacity: 1;
+      transform: scale(1);
+  }
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl h3 {
+  font-size: 1.8rem; /* Título do modal maior */
+  font-weight: 700;
+  color: var(--cor-texto-principal);
+  margin-bottom: 0.75rem;
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl p {
+  font-size: 1rem;
+  color: var(--cor-texto-secundario);
+  margin-bottom: 0.5rem;
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl p strong {
+  color: var(--cor-texto-principal);
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl .text-green-500 {
+  color: var(--cor-sucesso);
+}
+.bg-white.p-8.rounded-lg.shadow-2xl .text-red-600 {
+  color: var(--cor-erro);
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl select {
+  font-family: 'Georgia', serif;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: var(--cor-texto-principal);
+  background-color: #fcfcfc;
+  margin-top: 1rem;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+.bg-white.p-8.rounded-lg.shadow-2xl select:focus {
+  outline: none;
+  border-color: var(--cor-primaria-hover);
+  box-shadow: 0 0 0 3px rgba(168, 125, 75, 0.2);
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl .text-sm {
+  font-size: 0.9rem;
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl .mt-8 {
+  margin-top: 2rem;
+}
+
+.bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 button {
+  padding: 0.8rem 1.8rem; /* Botões maiores e mais elegantes */
+  border-radius: 0.75rem; /* Mais arredondados */
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+.bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 .bg-gray-300 {
+  background-color: #e0e0e0; /* Cinza suave */
+  color: var(--cor-texto-principal);
+}
+.bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 .bg-gray-300:hover {
+  background-color: #c0c0c0;
+}
+.bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 .bg-green-600 {
+  background-color: var(--cor-sucesso);
+}
+.bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 .bg-green-600:hover {
+  background-color: #4CAF50; /* Verde mais escuro */
+}
+
+/* Media Queries para Responsividade (adaptando as novas classes) */
+@media (max-width: 1024px) {
+  .dashboard-container {
+      padding: 2rem;
+  }
+  .dashboard-title {
+      font-size: 2.2rem;
+  }
+  .card-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+  }
+  .pedido-card {
+      padding: 1.5rem;
+  }
+  .cliente-nome {
+      font-size: 1.6rem;
+  }
+  .status-table button {
+      min-width: 150px;
+      padding: 0.8rem 1rem;
+  }
+  .dashboard-search input {
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+      padding: 1.5rem;
+  }
+  .dashboard-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+  }
+  .status-table {
+      flex-direction: column; /* Botões de status em coluna */
+      gap: 0.5rem;
+  }
+  .status-table button {
+      width: 100%;
+      min-width: unset; /* Remove min-width */
+  }
+  .card-grid {
+      grid-template-columns: 1fr; /* Uma coluna em mobile */
+      gap: 1.25rem;
+  }
+  .pedido-card {
+      padding: 1.25rem;
+  }
+  .cliente-nome {
+      font-size: 1.4rem;
+  }
+  .action-buttons {
+      flex-direction: row; /* Volta a ser linha para economizar espaço em cards menores */
+      margin-top: 1rem;
+      width: 100%;
+      justify-content: center;
+  }
+  .action-buttons button {
+      width: 40px; /* Tamanho fixo para mobile */
+      height: 40px;
+  }
+  .dashboard-search input {
+      padding: 0.7rem 0.9rem;
+  }
+  .dashboard-pagination button {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.9rem;
+  }
+
+  /* Modal em mobile */
+  .bg-white.p-8.rounded-lg.shadow-2xl {
+      padding: 1.5rem;
+      max-width: 90%;
+  }
+  .bg-white.p-8.rounded-lg.shadow-2xl h3 {
+      font-size: 1.4rem;
+  }
+  .bg-white.p-8.rounded-lg.shadow-2xl p {
+      font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+      padding: 1rem;
+  }
+  .dashboard-title {
+      font-size: 1.8rem;
+  }
+  .status-table button {
+      font-size: 0.9rem;
+      padding: 0.7rem;
+  }
+  .pedido-card {
+      padding: 1rem;
+  }
+  .cliente-nome {
+      font-size: 1.2rem;
+  }
+  .text-sm {
+      font-size: 0.85rem;
+  }
+  .text-xs {
+      font-size: 0.75rem;
+  }
+}

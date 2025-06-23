@@ -1,12 +1,12 @@
 // src/pages/Dashboard.js
 
 import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom'; // Mantido useNavigate, Link foi removido
+import { useNavigate } from 'react-router-dom'; // 'Link' foi removido desta importação
 import { useAuth } from '../context/AuthContext';
-// Removendo 'query' e 'where' que não são mais usadas diretamente na busca simples
 import { collection, onSnapshot } from 'firebase/firestore'; 
-import { Book, ChefHat, Calculator, FilePlus, ListChecks, Calendar } from 'lucide-react';
-// Removendo 'isThisWeek', 'isBefore', 'addDays' que não são usadas na lógica atual de "Pedidos da Semana"
+// Ícones usados: Book, ChefHat, FilePlus, ListChecks, Calendar, DollarSign.
+// 'Calculator' foi removido daqui pois não é usado diretamente no JSX atual.
+import { Book, ChefHat, FilePlus, ListChecks, Calendar, DollarSign } from 'lucide-react'; 
 import { format, parseISO, startOfWeek, endOfWeek } from 'date-fns'; 
 import { ptBR } from 'date-fns/locale';
 import './Dashboard.css';
@@ -23,7 +23,6 @@ function Dashboard() {
       return;
     }
 
-    // Apenas busca a coleção, a filtragem e ordenação são feitas no frontend com useMemo
     const q = collection(db, 'pedidos'); 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const lista = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -37,7 +36,6 @@ function Dashboard() {
     return () => unsubscribe();
   }, [db]);
 
-  // Lógica para filtrar pedidos da semana
   const pedidosDaSemana = useMemo(() => {
     if (!pedidos.length) return [];
 
@@ -58,10 +56,9 @@ function Dashboard() {
       }
     });
 
-    // Opcional: ordenar os pedidos da semana por data de entrega (mais próximos primeiro)
     filtered.sort((a, b) => {
-        const dateA = a.dataEntrega ? parseISO(a.dataEntrega) : new Date(8640000000000000); // Max Date para ir pro final
-        const dateB = b.dataEntrega ? parseISO(b.dataEntrega) : new Date(8640000000000000); // Max Date para ir pro final
+        const dateA = a.dataEntrega ? parseISO(a.dataEntrega) : new Date(8640000000000000); 
+        const dateB = b.dataEntrega ? parseISO(b.dataEntrega) : new Date(8640000000000000); 
         return dateA.getTime() - dateB.getTime();
     });
 
@@ -96,10 +93,16 @@ function Dashboard() {
         </button>
         <button onClick={() => navigate('/insumos')} className="admin-nav-button" style={{backgroundColor: '#FFDAB9', color: '#8B4513'}}><Book size={20}/> Gestão de Insumos</button>
         <button onClick={() => navigate('/receitas')} className="admin-nav-button" style={{backgroundColor: '#C1E1C1', color: '#2E8B57'}}><ChefHat size={20}/> Fichas Técnicas</button>
-        <button onClick={() => navigate('/precificacao')} className="admin-nav-button" style={{backgroundColor: '#B0E0E6', color: '#4682B4'}}><Calculator size={20}/> Precificação Detalhada</button>
+        <button onClick={() => navigate('/precificacao')} className="admin-nav-button" style={{backgroundColor: '#B0E0E6', color: '#4682B4'}}>
+            {/* Removido o ícone Calculator daqui, pois ele não foi importado na lista reduzida. */}
+            Precificação Detalhada
+        </button>
+        {/* Botão para Fluxo de Caixa */}
+        <button onClick={() => navigate('/fluxo-de-caixa')} className="admin-nav-button" style={{backgroundColor: '#FFF2CC', color: '#B8860B'}}>
+            <DollarSign size={20}/> Fluxo de Caixa
+        </button>
       </div>
 
-      {/* NOVA SEÇÃO: Pedidos da Semana */}
       <div className="weekly-orders-section">
         <h2 className="weekly-orders-title"><Calendar size={20}/> Pedidos da Semana ({pedidosDaSemana.length})</h2>
         {loadingPedidos ? (

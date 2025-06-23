@@ -7,10 +7,11 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import GerenciarInsumos from './pages/GerenciarInsumos';
-import GerenciarReceitas from './pages/GerenciarReceitas';
+import GerenciarReceitas from './pages/GerenciarReceitas'; // Que agora é o Catálogo de Produtos Precificados
 import PrecificacaoDetalhada from './pages/PrecificacaoDetalhada';
 import CadastroPedidoAdmin from './pages/CadastroPedidoAdmin';
-import Pedidos from './pages/Pedidos'; // 1. Importa a nova página
+import Pedidos from './pages/Pedidos';
+import FluxoDeCaixa from './pages/FluxoDeCaixa'; // Importa o novo componente FluxoDeCaixa
 
 function HomeRedirect() {
   const { currentUser, loading } = useAuth();
@@ -28,13 +29,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/insumos" element={<PrivateRoute><GerenciarInsumos /></PrivateRoute>} />
-          <Route path="/receitas" element={<PrivateRoute><GerenciarReceitas /></PrivateRoute>} />
+          <Route path="/receitas" element={<PrivateRoute><GerenciarReceitas /></PrivateRoute>} /> {/* Catálogo de Produtos */}
           <Route path="/precificacao" element={<PrivateRoute><PrecificacaoDetalhada /></PrivateRoute>} />
           <Route path="/novo-pedido" element={<PrivateRoute><CadastroPedidoAdmin /></PrivateRoute>} />
           <Route path="/editar-pedido/:id" element={<PrivateRoute><CadastroPedidoAdmin /></PrivateRoute>} />
-          
-          {/* 2. Adiciona a nova rota para a lista de pedidos */}
           <Route path="/pedidos" element={<PrivateRoute><Pedidos /></PrivateRoute>} />
+          
+          {/* Adiciona a nova rota para o Fluxo de Caixa */}
+          <Route path="/fluxo-de-caixa" element={<PrivateRoute><FluxoDeCaixa /></PrivateRoute>} />
 
           <Route path="/" element={<HomeRedirect />} />
         </Routes>
