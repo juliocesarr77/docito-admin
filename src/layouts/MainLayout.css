@@ -1,0 +1,59 @@
+/* src/layouts/MainLayout.css */
+
+/* Cores e fontes para o tema luxuoso (DEFINIÇÃO IDÊNTICA EM TODOS OS ARQUIVOS) */
+:root {
+    --cor-fundo-pagina: #FDFBFA; /* Quase branco, suave */
+    --cor-card-fundo: #FFFFFF;
+    --cor-borda: #E8E2DA; /* Borda mais quente e suave */
+    --cor-texto-titulo: #36261B; /* Marrom escuro profundo */
+    --cor-texto-principal: #5C4F42; /* Marrom médio para textos */
+    --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
+    
+    --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
+    --cor-primaria-hover: #C59A67; /* Dourado mais claro para hover */
+    --cor-primaria-claro: #F5E8D8; /* Fundo claro para botões/destaque */
+
+    --cor-sucesso: #5FA85D; /* Verde orgânico e suave */
+    --cor-erro: #D9534F; /* Vermelho mais contido */
+    --cor-alerta: #E6B800; /* Amarelo ouro para avisos */
+    --cor-info: #5BC0DE; /* Azul suave */
+    --cor-orange: #FFA000; /* Laranja para status "Atenção" (usado em Pedidos.css) */
+    --cor-secondary-card: #F0F4F7; /* Cinza azulado para cards secundários */ /* (usado em Dashboard.css) */
+
+    --sombra-leve: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --sombra-modal: 0 15px 30px rgba(0,0,0,0.3); /* Sombra para modais */
+
+    /* Cores específicas da Sidebar (redefinidas para garantir que sejam lidas aqui também) */
+    --cor-fundo-sidebar: #36261B; 
+    --cor-texto-sidebar: #E8E2DA; 
+    --cor-link-active: #C59A67; 
+    --cor-borda-sidebar: #5C4F42; 
+}
+
+body {
+    font-family: 'Georgia', serif;
+    color: var(--cor-texto-principal);
+}
+
+.main-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--cor-fundo-pagina);
+}
+
+.main-content {
+    flex-grow: 1;
+    margin-left: 250px; /* Adapta-se à largura da sidebar */
+    padding: 2.5rem; /* Padding uniforme para o conteúdo de todas as páginas */
+    transition: margin-left 0.3s ease-in-out;
+    min-height: 100vh; 
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 992px) {
+    .main-content {
+        margin-left: 0; 
+        padding-top: 5rem; /* Espaço para o botão hamburger fixo no topo */
+    }
+}

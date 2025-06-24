@@ -1,32 +1,166 @@
 /* src/pages/Dashboard.css */
 
+/* Cores e fontes para o tema luxuoso (DEFINIÇÃO IDÊNTICA EM TODOS OS ARQUIVOS) */
+:root {
+    --cor-fundo-pagina: #FDFBFA; /* Quase branco, suave */
+    --cor-card-fundo: #FFFFFF;
+    --cor-borda: #E8E2DA; /* Borda mais quente e suave */
+    --cor-texto-titulo: #36261B; /* Marrom escuro profundo */
+    --cor-texto-principal: #5C4F42; /* Marrom médio para textos */
+    --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
+    
+    --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
+    --cor-primaria-hover: #C59A67; /* Dourado mais claro para hover */
+    --cor-primaria-claro: #F5E8D8; /* Fundo claro para botões/destaque */
+
+    --cor-sucesso: #5FA85D; /* Verde orgânico e suave */
+    --cor-erro: #D9534F; /* Vermelho mais contido */
+    --cor-alerta: #E6B800; /* Amarelo ouro para avisos */
+    --cor-info: #5BC0DE; /* Azul suave */
+    --cor-orange: #FFA000; /* Laranja para status "Atenção" (usado em Pedidos.css) */
+    --cor-secondary-card: #F0F4F7; /* Cinza azulado para cards secundários */
+
+    --sombra-leve: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --sombra-modal: 0 15px 30px rgba(0,0,0,0.3); /* Sombra para modais */
+}
+
+body {
+    background-color: var(--cor-fundo-pagina);
+    font-family: 'Georgia', serif;
+    color: var(--cor-texto-principal);
+}
+
 .admin-dashboard-container {
-    padding: 2.5rem;
-    background-color: #fffaf5;
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif; /* Uma fonte mais moderna e limpa */
+    padding: 0;
+    padding-bottom: 2.5rem;
+    background-color: var(--cor-fundo-pagina);
+    min-height: calc(100vh - 5rem);
     text-align: center;
 }
 
 .admin-dashboard-title {
-    font-size: 2rem;
+    font-size: 2.8rem;
     font-weight: 700;
-    margin-bottom: 1rem;
-    color: #5a2a0c;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--cor-texto-titulo);
+    letter-spacing: -0.02em;
 }
 
 .admin-welcome-message {
-    color: #333;
-    margin-bottom: 3rem;
+    color: var(--cor-texto-principal);
+    margin-bottom: 2.5rem;
     font-size: 1.1rem;
 }
 
+/* Estilos para o Grid de Métricas */
+.dashboard-metrics-grid {
+    display: grid;
+    /* Ajuste do minmax para dar mais espaço aos cards, permitindo 3 ou 4 colunas */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    max-width: 1200px; 
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2.5rem;
+}
+
+.metric-card {
+    background-color: var(--cor-card-fundo);
+    border: 1px solid var(--cor-borda);
+    border-radius: 0.75rem;
+    box-shadow: var(--sombra-leve);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem; /* Ajuste do espaçamento entre ícone e conteúdo */
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--sombra-media);
+}
+
+.metric-card .metric-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cor-primaria-claro);
+    flex-shrink: 0;
+}
+
+.metric-card .metric-icon svg {
+    font-size: 28px;
+}
+
+.metric-card .metric-content {
+    flex-grow: 1; /* Permite que o conteúdo de texto cresça */
+    min-width: 0; /* Permite que o conteúdo de texto encolha se necessário */
+    overflow: hidden; /* Garante que o texto não "vaze" se for muito longo */
+}
+
+.metric-card .metric-content h3 {
+    font-size: 0.95rem; /* Ligeiramente menor */
+    font-weight: 600;
+    color: var(--cor-texto-secundario);
+    margin-bottom: 0.2rem; /* Menos margem */
+    white-space: nowrap; /* Tenta manter em uma linha */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+}
+
+.metric-card .metric-content .value {
+    font-size: 1.5rem; /* Ligeiramente menor para acomodar valores grandes */
+    font-weight: 700;
+    color: var(--cor-texto-titulo); /* Cor padrão do valor */
+    line-height: 1.2;
+    white-space: nowrap; /* Tenta manter em uma linha */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adiciona "..." se o valor for muito longo */
+}
+
+/* Cores para os cards de métrica */
+.metric-card.primary .metric-icon { background-color: rgba(168, 125, 75, 0.2); }
+.metric-card.primary .metric-icon svg { color: var(--cor-primaria); }
+
+.metric-card.success .metric-icon { background-color: rgba(95, 168, 93, 0.2); }
+.metric-card.success .metric-icon svg { color: var(--cor-sucesso); }
+.metric-card.success .metric-content .value { color: var(--cor-sucesso); } /* CORREÇÃO AQUI: Valor da receita verde */
+
+
+.metric-card.error .metric-icon { background-color: rgba(217, 83, 79, 0.2); }
+.metric-card.error .metric-icon svg { color: var(--cor-erro); }
+.metric-card.error .metric-content .value { color: var(--cor-erro); } /* Valor da despesa vermelho */
+
+
+.metric-card.info .metric-icon { background-color: rgba(91, 192, 222, 0.2); }
+.metric-card.info .metric-icon svg { color: var(--cor-info); }
+/* Ajuste específico para o balanço do mês: se for positivo, é info (azul); se for negativo, é error (vermelho) */
+.metric-card.info .metric-content .value { color: var(--cor-info); }
+
+
+.metric-card.secondary .metric-icon { background-color: var(--cor-primaria-claro); }
+.metric-card.secondary .metric-icon svg { color: var(--cor-primaria); }
+
+
+/* Estilos para os botões de navegação do dashboard */
 .admin-nav-container {
     display: flex;
     justify-content: center;
-    gap: 1.5rem; /* Aumenta o espaçamento */
+    gap: 1.5rem; 
     flex-wrap: wrap;
     margin-bottom: 3rem;
+    max-width: 900px; 
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2.5rem;
 }
 
 .admin-nav-button {
@@ -34,61 +168,78 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.8rem 1.5rem;
-    border-radius: 0.5rem; /* Bordas mais arredondadas */
-    border: 1px solid #ffe0b2;
-    background-color: #fff;
-    color: #bf360c;
+    border-radius: 0.5rem; 
+    border: 1px solid var(--cor-borda);
+    background-color: var(--cor-card-fundo);
+    color: var(--cor-texto-principal);
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: var(--sombra-leve);
 }
 
 .admin-nav-button:hover {
-    background-color: #ffe0b2;
+    background-color: var(--cor-primaria-claro);
+    color: var(--cor-primaria);
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    box-shadow: var(--sombra-media);
+}
+
+.admin-nav-button svg {
+    color: var(--cor-texto-secundario);
+}
+.admin-nav-button:hover svg {
+    color: var(--cor-primaria);
 }
 
 .admin-logout-button {
-    padding: 0.6rem 1.5rem;
-    border-radius: 0.5rem;
+    padding: 0.8rem 2rem;
+    border-radius: 0.75rem;
     border: none;
-    background-color: #ff6b6b;
+    background-color: var(--cor-erro);
     color: white;
     font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 2rem;
+    transition: all 0.2s ease;
+    margin-top: 3rem;
+    box-shadow: var(--sombra-leve);
+    margin-left: auto;
+    margin-right: auto;
+    display: block; 
 }
 
 .admin-logout-button:hover {
-    background-color: #e05b5b;
+    background-color: #C0392B;
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-media);
 }
 
-/* NOVOS ESTILOS PARA PEDIDOS DA SEMANA */
+/* Seção de Pedidos da Semana */
 .weekly-orders-section {
-    background-color: #ffffff;
-    border: 1px solid #ffe0b2;
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin: 2rem auto; /* Centraliza e adiciona margem */
-    max-width: 800px; /* Limita a largura para melhor leitura */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    text-align: left; /* Alinha o texto à esquerda dentro da seção */
+    background-color: var(--cor-card-fundo);
+    border: 1px solid var(--cor-borda);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: 3rem auto; 
+    max-width: 900px;
+    box-shadow: var(--sombra-leve);
+    text-align: left;
 }
 
 .weekly-orders-title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 600;
-    color: #5a2a0c;
-    margin-bottom: 1rem;
+    color: var(--cor-texto-titulo);
+    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
-    gap: 10px;
-    justify-content: center; /* Centraliza o título */
+    gap: 0.75rem;
+    justify-content: center; 
+}
+.weekly-orders-title svg {
+    color: var(--cor-primaria);
 }
 
 .weekly-orders-list {
@@ -98,29 +249,139 @@
 }
 
 .weekly-order-item {
-    background-color: #fffaf5;
-    border: 1px solid #ffe0cc;
-    border-radius: 8px;
-    padding: 1rem;
+    background-color: var(--cor-fundo-pagina);
+    border: 1px solid var(--cor-borda);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
     margin-bottom: 0.75rem;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);
+}
+.weekly-order-item:last-child {
+    margin-bottom: 0;
 }
 
 .weekly-order-item p {
     margin: 0;
     font-size: 0.95rem;
-    color: #4a4a4a;
+    color: var(--cor-texto-principal);
 }
 
 .weekly-order-item p strong {
-    color: #5a2a0c;
+    color: var(--cor-texto-titulo);
 }
 
-/* Estilos para o status dentro dos itens da semana, reaproveitando de Pedidos.css */
-.status-pendente { color: #d32f2f; font-weight: bold; } /* Vermelho mais forte */
-.status-em-producao { color: #1976d2; font-weight: bold; } /* Azul mais forte */
-.status-pronto { color: #fbc02d; font-weight: bold; } /* Amarelo mais forte */
-.status-entregue { color: #388e3c; font-weight: bold; } /* Verde mais forte */
+/* Estilos para o status dentro dos itens da semana */
+.status-pendente { color: var(--cor-erro); font-weight: bold; } 
+.status-em-producao { color: var(--cor-info); font-weight: bold; } 
+.status-pronto { color: var(--cor-alerta); font-weight: bold; } 
+.status-entregue { color: var(--cor-sucesso); font-weight: bold; }
+
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    /* Ajustado para 3 colunas em telas maiores, se necessário, ou 4 com minmax menor */
+    .dashboard-metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 992px) { /* Tablets */
+    .admin-dashboard-title {
+        font-size: 2.2rem;
+    }
+    .admin-dashboard-title svg {
+        font-size: 2.5rem;
+    }
+    .dashboard-metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+    .metric-card {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+    .metric-card .metric-icon {
+        width: 45px;
+        height: 45px;
+    }
+    .metric-card .metric-icon svg {
+        font-size: 24px;
+    }
+    .metric-card .metric-content h3 {
+        font-size: 0.9rem;
+    }
+    .metric-card .metric-content .value {
+        font-size: 1.4rem;
+    }
+    .admin-nav-container {
+        gap: 1rem;
+    }
+    .admin-nav-button {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    .weekly-orders-section {
+        padding: 1.5rem;
+    }
+    .weekly-order-item {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 768px) { /* Mobile Grande */
+    .admin-dashboard-container {
+        padding: 1.5rem;
+    }
+    .admin-dashboard-title {
+        font-size: 1.8rem;
+    }
+    .admin-dashboard-title svg {
+        font-size: 2rem;
+    }
+    .dashboard-metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+    .metric-card {
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+    }
+    .admin-nav-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+    }
+    .admin-nav-button {
+        width: 100%;
+        justify-content: center;
+    }
+    .admin-logout-button {
+        width: 100%;
+    }
+    .weekly-orders-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) { /* Mobile Pequeno */
+    .admin-dashboard-container {
+        padding: 1rem;
+    }
+    .admin-dashboard-title {
+        font-size: 1.5rem;
+    }
+    .admin-dashboard-title svg {
+        font-size: 1.8rem;
+    }
+    .metric-card .metric-content .value {
+        font-size: 1.2rem;
+    }
+    .admin-nav-button {
+        font-size: 0.85rem;
+        padding: 0.6rem 1rem;
+    }
+}

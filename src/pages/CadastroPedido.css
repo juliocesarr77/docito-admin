@@ -1,79 +1,153 @@
 /* src/pages/CadastroPedido.css */
 
-/* Cores e fontes para o tema luxuoso */
+/* Cores e fontes para o tema luxuoso (DEFINIÇÃO IDÊNTICA EM TODOS OS ARQUIVOS) */
 :root {
     --cor-fundo-pagina: #FDFBFA; /* Quase branco, suave */
     --cor-card-fundo: #FFFFFF;
     --cor-borda: #E8E2DA; /* Borda mais quente e suave */
-    --cor-texto-principal: #36261B; /* Marrom escuro profundo */
+    --cor-texto-titulo: #36261B; /* Marrom escuro profundo */
+    --cor-texto-principal: #5C4F42; /* Marrom médio para textos */
     --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
+    
     --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
     --cor-primaria-hover: #C59A67; /* Dourado mais claro para hover */
+    --cor-primaria-claro: #F5E8D8; /* Fundo claro para botões/destaque */
+
     --cor-sucesso: #5FA85D; /* Verde orgânico e suave */
     --cor-erro: #D9534F; /* Vermelho mais contido */
-    --cor-aviso: #E6B800; /* Amarelo ouro para avisos */
+    --cor-alerta: #E6B800; /* Amarelo ouro para avisos */
+    --cor-info: #5BC0DE; /* Azul suave */
+    --cor-orange: #FFA000; /* Laranja para status "Atenção" (usado em Pedidos.css) */
+    --cor-secondary-card: #F0F4F7; /* Cinza azulado para cards secundários (usado em Dashboard.css) */
+
+    --sombra-leve: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --sombra-modal: 0 15px 30px rgba(0,0,0,0.3); /* Sombra para modais */
 }
 
 body {
     background-color: var(--cor-fundo-pagina);
-    font-family: 'Georgia', serif; /* Fonte serifada para elegância */
+    font-family: 'Georgia', serif;
     color: var(--cor-texto-principal);
 }
 
 .cadastro-container {
-    max-width: 800px; /* Limita a largura para melhor legibilidade */
-    margin: 2rem auto; /* Centraliza o container */
+    padding: 0;
+    padding-bottom: 2.5rem;
     background-color: var(--cor-fundo-pagina);
-    padding: 2.5rem; /* Mais espaçamento */
+    min-height: calc(100vh - 5rem); 
 }
+
+/* Estilo para o botão "Voltar para o Painel" (agora alinhado com a Sidebar) */
+.btn-voltar-dashboard {
+    display: inline-flex;
+    align-items: center;
+    color: var(--cor-texto-secundario);
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    margin-top: 2.5rem;
+    margin-bottom: 2rem;
+    margin-left: 2.5rem; 
+}
+.btn-voltar-dashboard:hover {
+    color: var(--cor-primaria);
+    transform: translateX(-3px);
+}
+.btn-voltar-dashboard svg {
+    margin-right: 0.5rem;
+    color: var(--cor-texto-secundario);
+}
+
 
 .cadastro-titulo {
     color: var(--cor-texto-principal);
-    font-size: 2.8rem; /* Título maior */
+    font-size: 2.8rem;
     font-weight: 700;
     text-align: center;
-    margin-bottom: 2.5rem; /* Mais espaço */
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
     letter-spacing: -0.03em;
 }
 
 .cadastro-form {
     background-color: var(--cor-card-fundo);
     border: 1px solid var(--cor-borda);
-    border-radius: 1rem; /* Bordas arredondadas */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Sombra elegante */
-    padding: 2.5rem; /* Mais padding interno */
+    border-radius: 1rem;
+    box-shadow: var(--sombra-media);
+    padding: 2.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem; /* Espaçamento entre os campos */
+    gap: 1.5rem;
+    max-width: 800px; 
+    margin: 0 auto; 
 }
+
+/* NOVO: Estilo para agrupamento de campos dentro do formulário */
+.form-section {
+    margin-bottom: 1.5rem; /* Espaçamento entre as seções */
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed var(--cor-borda); /* Separador sutil */
+}
+.form-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+/* NOVO: Estilo para o grid de linhas de formulário (flexível) */
+.form-row-grid {
+    display: grid;
+    /* Divide em 2 colunas para campos pequenos, com um mínimo de 200px */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 1.5rem; 
+    align-items: end; /* Alinha itens ao final da célula */
+}
+
+/* Classes para spans de coluna no grid */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+.form-group.span-2 { grid-column: span 2; } /* Ocupa 2 colunas */
+.form-group.span-3 { grid-column: span 3; } /* Ocupa 3 colunas */
+.form-group.span-full { grid-column: 1 / -1; } /* Ocupa todas as colunas */
+
 
 .cadastro-label {
     font-weight: 600;
     color: var(--cor-texto-principal);
     font-size: 1rem;
-    display: block; /* Garante que o label ocupe sua própria linha */
-    margin-bottom: 0.5rem; /* Espaçamento entre label e input */
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.required-indicator {
+    color: var(--cor-erro); /* Vermelho para o asterisco */
+    margin-left: 0.25rem;
+    font-weight: bold;
 }
 
 .cadastro-input {
     width: 100%;
-    padding: 0.8rem 1rem; /* Padding confortável */
+    padding: 0.8rem 1rem;
     border: 1px solid var(--cor-borda);
-    border-radius: 0.5rem; /* Bordas suaves */
+    border-radius: 0.5rem;
     font-size: 1rem;
     color: var(--cor-texto-principal);
-    background-color: #fcfcfc; /* Um fundo quase branco para inputs */
+    background-color: #fcfcfc;
     transition: all 0.2s ease;
 }
 
 .cadastro-input:focus {
     outline: none;
     border-color: var(--cor-primaria-hover);
-    box-shadow: 0 0 0 3px rgba(168, 125, 75, 0.2); /* Sombra de foco com cor primária */
+    box-shadow: 0 0 0 3px rgba(168, 125, 75, 0.2);
 }
 
 textarea.cadastro-input {
-    resize: vertical; /* Permite redimensionar verticalmente */
+    resize: vertical;
     min-height: 80px;
 }
 
@@ -83,7 +157,7 @@ textarea.cadastro-input {
     align-items: center;
     width: 100%;
     padding: 1rem 1.5rem;
-    background-color: var(--cor-primaria);
+    background-color: var(--cor-primaria); /* Cor primária de luxo */
     color: white;
     font-size: 1.1rem;
     font-weight: 700;
@@ -91,24 +165,37 @@ textarea.cadastro-input {
     border-radius: 0.75rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem; /* Mais espaço antes do botão */
+    box-shadow: var(--sombra-media);
+    margin-top: 2rem;
 }
 
-.cadastro-botao:hover {
+.cadastro-botao:hover:not(:disabled) {
     background-color: var(--cor-primaria-hover);
     transform: translateY(-2px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 .cadastro-botao:disabled {
-    background-color: #D3C1B0; /* Tom mais claro e dessaturado */
+    background-color: var(--cor-primaria-claro); /* Cor clara e luxuosa para disabled */
+    color: var(--cor-texto-secundario); /* Texto mais suave para disabled */
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+    opacity: 0.7; /* Ligeiramente transparente */
 }
 
-/* Notificação (ajustes de cor e sombra) */
+/* Estilo para o spinner de carregamento no botão */
+.cadastro-botao .spinner {
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
 .notificacao {
     padding: 1rem;
     margin-bottom: 1.5rem;
@@ -117,27 +204,31 @@ textarea.cadastro-input {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--sombra-leve);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2.5rem; 
 }
 .notificacao.sucesso {
-    background-color: #E8F5E9; /* Verde claro */
+    background-color: #E8F5E9;
     color: var(--cor-sucesso);
     border: 1px solid var(--cor-sucesso);
 }
 .notificacao.erro {
-    background-color: #FFEBEE; /* Vermelho claro */
+    background-color: #FFEBEE;
     color: var(--cor-erro);
     border: 1px solid var(--cor-erro);
 }
 
-/* Novos estilos para campos de pagamento e observações */
+/* Estilos para campos de pagamento e observações */
 .cadastro-subtitulo {
-    font-size: 1.4rem; /* Subtítulo para seções */
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--cor-texto-principal);
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px dashed var(--cor-borda); /* Linha tracejada para separar seções */
+    border-bottom: 1px dashed var(--cor-borda);
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -145,8 +236,8 @@ textarea.cadastro-input {
 
 .status-pagamento-group {
     display: flex;
-    gap: 1.5rem; /* Espaço entre as opções de rádio */
-    flex-wrap: wrap; /* Para responsividade */
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .status-pagamento-group label {
@@ -159,10 +250,10 @@ textarea.cadastro-input {
 }
 
 .status-pagamento-group input[type="radio"] {
-    appearance: none; /* Remove estilo padrão do rádio */
+    appearance: none;
     width: 1.25rem;
     height: 1.25rem;
-    border: 2px solid var(--cor-primaria); /* Borda com cor primária */
+    border: 2px solid var(--cor-primaria);
     border-radius: 50%;
     display: grid;
     place-content: center;
@@ -176,7 +267,7 @@ textarea.cadastro-input {
     border-radius: 50%;
     transform: scale(0);
     transition: transform 0.2s ease;
-    background-color: var(--cor-primaria); /* Círculo interno */
+    background-color: var(--cor-primaria);
 }
 
 .status-pagamento-group input[type="radio"]:checked::before {
@@ -184,19 +275,19 @@ textarea.cadastro-input {
 }
 
 .status-pagamento-group input[type="radio"]:focus {
-    outline: 2px solid rgba(168, 125, 75, 0.5); /* Foco ao redor do rádio */
+    outline: 2px solid rgba(168, 125, 75, 0.5);
     outline-offset: 2px;
 }
 
 .pagamento-resumo {
-    background-color: #F8F4F0; /* Um tom um pouco mais escuro que o fundo da página */
+    background-color: #F8F4F0;
     border: 1px solid var(--cor-borda);
     border-radius: 0.75rem;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sombra interna sutil */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .pagamento-resumo p {
@@ -212,19 +303,75 @@ textarea.cadastro-input {
 .pagamento-resumo .text-green-600 { color: var(--cor-sucesso); }
 .pagamento-resumo .text-red-600 { color: var(--cor-erro); }
 
+/* Removido o estilo de .error-message */
+
+
+/* NOVO: Estilos para o toggle de modo de entrada de produto */
+.product-entry-toggle {
+    display: flex;
+    justify-content: flex-end; /* Alinha à direita */
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--cor-texto-secundario);
+    gap: 0.5rem;
+}
+.product-entry-toggle label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 0.5rem;
+}
+.product-entry-toggle input[type="checkbox"] {
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--cor-primaria);
+    border-radius: 0.25rem;
+    display: grid;
+    place-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.product-entry-toggle input[type="checkbox"]::before {
+    content: '✔';
+    font-size: 0.8rem;
+    color: white;
+    transform: scale(0);
+    transition: transform 0.2s ease;
+}
+.product-entry-toggle input[type="checkbox"]:checked {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+}
+.product-entry-toggle input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+.product-entry-toggle input[type="checkbox"]:focus {
+    outline: 2px solid rgba(168, 125, 75, 0.5);
+    outline-offset: 2px;
+}
+
+
 /* Media Queries para Responsividade */
-@media (max-width: 768px) {
+@media (max-width: 992px) { /* Tablets (ajusta para 2 colunas) */
     .cadastro-container {
-        padding: 1.5rem;
-        margin: 1rem auto;
+        padding: 1.5rem; 
     }
     .cadastro-titulo {
-        font-size: 2rem;
+        font-size: 2.2rem;
         margin-bottom: 2rem;
     }
     .cadastro-form {
         padding: 1.5rem;
         gap: 1rem;
+        max-width: 100%; 
+    }
+    .form-row-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+    .form-group.span-2, .form-group.span-3, .form-group.span-full { /* Reiniciar spans para 1 coluna */
+        grid-column: span 1; 
     }
     .cadastro-label {
         font-size: 0.95rem;
@@ -247,7 +394,7 @@ textarea.cadastro-input {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) { /* Mobile Pequeno (ajusta para 1 coluna) */
     .cadastro-container {
         padding: 1rem;
     }
@@ -259,6 +406,15 @@ textarea.cadastro-input {
         padding: 1rem;
         gap: 0.8rem;
     }
+    .form-row-grid {
+        grid-template-columns: 1fr; 
+    }
+    .form-group.span-2, 
+    .form-group.span-3, 
+    .form-group.span-full { 
+        grid-column: span 1; 
+    }
+
     .cadastro-label {
         font-size: 0.9rem;
     }

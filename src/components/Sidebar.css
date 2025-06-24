@@ -1,0 +1,179 @@
+/* src/components/Sidebar.css */
+
+/* Cores e fontes para o tema luxuoso (DEFINIÇÃO IDÊNTICA EM TODOS OS ARQUIVOS) */
+:root {
+    --cor-fundo-pagina: #FDFBFA; /* Quase branco, suave */
+    --cor-card-fundo: #FFFFFF;
+    --cor-borda: #E8E2DA; /* Borda mais quente e suave */
+    --cor-texto-titulo: #36261B; /* Marrom escuro profundo */
+    --cor-texto-principal: #5C4F42; /* Marrom médio para textos */
+    --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
+    
+    --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
+    --cor-primaria-hover: #C59A67; /* Dourado mais claro para hover */
+    --cor-primaria-claro: #F5E8D8; /* Fundo claro para botões/destaque */
+
+    --cor-sucesso: #5FA85D; /* Verde orgânico e suave */
+    --cor-erro: #D9534F; /* Vermelho mais contido */
+    --cor-alerta: #E6B800; /* Amarelo ouro para avisos */
+    --cor-info: #5BC0DE; /* Azul suave */
+    --cor-orange: #FFA000; /* Laranja para status "Atenção" (usado em Pedidos.css) */
+    --cor-secondary-card: #F0F4F7; /* Cinza azulado para cards secundários (usado em Dashboard.css) */
+
+    --sombra-leve: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --sombra-modal: 0 15px 30px rgba(0,0,0,0.3); /* Sombra para modais */
+
+    /* Cores específicas da Sidebar */
+    --cor-fundo-sidebar: #36261B; /* Marrom escuro profundo */
+    --cor-texto-sidebar: #E8E2DA; /* Marrom claro */
+    --cor-link-active: #C59A67; /* Dourado mais claro para link ativo */
+    --cor-borda-sidebar: #5C4F42; /* Borda sutil */
+}
+
+/* Base da Sidebar */
+.sidebar {
+    width: 250px; /* Largura padrão da sidebar */
+    background-color: var(--cor-fundo-sidebar);
+    color: var(--cor-texto-sidebar);
+    height: 100vh; /* Ocupa a altura total da viewport */
+    position: fixed; /* Fixa a sidebar na tela */
+    top: 0;
+    left: 0;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Espaça header, nav e footer */
+    box-shadow: var(--sombra-media); /* Sombra mais visível para a sidebar */
+    z-index: 900; /* Garante que fique acima do conteúdo principal, mas abaixo de modais */
+    transition: transform 0.3s ease-in-out; /* Transição para mobile */
+}
+
+.sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--cor-borda-sidebar);
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-title {
+    font-family: 'Georgia', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--cor-link-active);
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1.5rem;
+    color: var(--cor-texto-sidebar);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-left: 5px solid transparent;
+}
+
+.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--cor-link-active); 
+    border-left-color: var(--cor-link-active);
+}
+
+.sidebar-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--cor-link-active);
+    font-weight: 600;
+    border-left-color: var(--cor-link-active);
+}
+
+.sidebar-link .sidebar-icon {
+    color: var(--cor-texto-sidebar);
+}
+
+.sidebar-link:hover .sidebar-icon,
+.sidebar-link.active .sidebar-icon {
+    color: inherit;
+}
+
+.sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--cor-borda-sidebar);
+    margin-top: 1.5rem;
+}
+
+.sidebar-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--cor-erro);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-logout-btn:hover {
+    background-color: #C0392B;
+    transform: translateY(-2px);
+}
+
+.sidebar-logout-btn .sidebar-icon {
+    color: white;
+}
+
+/* Mobile Responsiveness */
+.hamburger-menu {
+    display: none;
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    background-color: var(--cor-fundo-sidebar);
+    color: var(--cor-link-active);
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: var(--sombra-leve);
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 899;
+}
+
+@media (max-width: 992px) { /* Tablets e Mobile */
+    .sidebar {
+        transform: translateX(-100%);
+        left: 0;
+        box-shadow: var(--sombra-sidebar);
+    }
+
+    .sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    .hamburger-menu, .sidebar-overlay {
+        display: block;
+    }
+}

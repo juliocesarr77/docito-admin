@@ -4,14 +4,17 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
+import PrivateRoute from './components/PrivateRoute'; // PrivateRoute continua a proteger as rotas
+import MainLayout from './layouts/MainLayout'; // Importa o novo MainLayout
+
+// Importe todos os seus componentes de página aqui, eles serão renderizados dentro do MainLayout
 import Dashboard from './pages/Dashboard';
-import PrivateRoute from './components/PrivateRoute';
 import GerenciarInsumos from './pages/GerenciarInsumos';
-import GerenciarReceitas from './pages/GerenciarReceitas'; // Que agora é o Catálogo de Produtos Precificados
+import GerenciarReceitas from './pages/GerenciarReceitas';
 import PrecificacaoDetalhada from './pages/PrecificacaoDetalhada';
 import CadastroPedidoAdmin from './pages/CadastroPedidoAdmin';
 import Pedidos from './pages/Pedidos';
-import FluxoDeCaixa from './pages/FluxoDeCaixa'; // Importa o novo componente FluxoDeCaixa
+import FluxoDeCaixa from './pages/FluxoDeCaixa';
 
 function HomeRedirect() {
   const { currentUser, loading } = useAuth();
@@ -27,16 +30,18 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/insumos" element={<PrivateRoute><GerenciarInsumos /></PrivateRoute>} />
-          <Route path="/receitas" element={<PrivateRoute><GerenciarReceitas /></PrivateRoute>} /> {/* Catálogo de Produtos */}
-          <Route path="/precificacao" element={<PrivateRoute><PrecificacaoDetalhada /></PrivateRoute>} />
-          <Route path="/novo-pedido" element={<PrivateRoute><CadastroPedidoAdmin /></PrivateRoute>} />
-          <Route path="/editar-pedido/:id" element={<PrivateRoute><CadastroPedidoAdmin /></PrivateRoute>} />
-          <Route path="/pedidos" element={<PrivateRoute><Pedidos /></PrivateRoute>} />
           
-          {/* Adiciona a nova rota para o Fluxo de Caixa */}
-          <Route path="/fluxo-de-caixa" element={<PrivateRoute><FluxoDeCaixa /></PrivateRoute>} />
+          {/* Todas as rotas protegidas usarão o MainLayout */}
+          <Route element={<PrivateRoute><MainLayout /></PrivateRoute>}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/insumos" element={<GerenciarInsumos />} />
+            <Route path="/receitas" element={<GerenciarReceitas />} /> 
+            <Route path="/precificacao" element={<PrecificacaoDetalhada />} />
+            <Route path="/novo-pedido" element={<CadastroPedidoAdmin />} />
+            <Route path="/editar-pedido/:id" element={<CadastroPedidoAdmin />} />
+            <Route path="/pedidos" element={<Pedidos />} />
+            <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
+          </Route>
 
           <Route path="/" element={<HomeRedirect />} />
         </Routes>

@@ -1,61 +1,101 @@
 /* src/pages/GerenciarInsumos.css */
 
+/* Cores e fontes para o tema luxuoso (DEFINIÇÃO IDÊNTICA EM TODOS OS ARQUIVOS) */
 :root {
-    --cor-fundo: #fffaf5; /* << CORREÇÃO: Fundo pêssego/laranja clarinho */
-    --cor-card: #ffffff;
-    --cor-borda: #fde2e4;
-    --cor-texto-principal: #5a2a0c;
-    --cor-texto-secundario: #a89b91;
-    --cor-primaria: #ffc0cb; /* Rosa claro (Pink) */
-    --cor-primaria-hover: #ffb6c1;
-    --cor-sucesso: #2e7d32; /* Verde mais vivo para o botão de editar */
-    --cor-perigo: #d32f2f; /* Vermelho mais vivo para deletar */
-    --cor-fundo-header-tabela: #fff7f0;
+    --cor-fundo-pagina: #FDFBFA; /* Quase branco, suave */
+    --cor-card-fundo: #FFFFFF;
+    --cor-borda: #E8E2DA; /* Borda mais quente e suave */
+    --cor-texto-titulo: #36261B; /* Marrom escuro profundo */
+    --cor-texto-principal: #5C4F42; /* Marrom médio para textos */
+    --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
+    
+    --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
+    --cor-primaria-hover: #C59A67; /* Dourado mais claro para hover */
+    --cor-primaria-claro: #F5E8D8; /* Fundo claro para botões/destaque */
+
+    --cor-sucesso: #5FA85D; /* Verde orgânico e suave */
+    --cor-erro: #D9534F; /* Vermelho mais contido */
+    --cor-alerta: #E6B800; /* Amarelo ouro para avisos */
+    --cor-info: #5BC0DE; /* Azul suave */
+    --cor-orange: #FFA000; /* Laranja para status "Atenção" (usado em Pedidos.css) */
+    --cor-secondary-card: #F0F4F7; /* Cinza azulado para cards secundários */ /* (usado em Dashboard.css) */
+
+    --sombra-leve: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --sombra-modal: 0 15px 30px rgba(0,0,0,0.3); /* Sombra para modais */
+}
+
+body {
+    background-color: var(--cor-fundo-pagina);
+    font-family: 'Georgia', serif;
+    color: var(--cor-texto-principal);
 }
 
 .insumos-container {
-    background-color: var(--cor-fundo);
-    padding: 2.5rem;
-    font-family: 'Inter', sans-serif, Arial, sans-serif;
-    min-height: 100vh;
+    /* Ajustado para se integrar ao MainLayout */
+    padding: 0; /* Removendo padding daqui, será adicionado pelo MainLayout */
+    padding-bottom: 2.5rem; /* Adiciona padding no final */
+    background-color: var(--cor-fundo-pagina);
+    min-height: calc(100vh - 5rem); /* Ajusta a altura mínima */
+    font-family: 'Georgia', serif; /* Mantido Georgia para consistência */
+    color: var(--cor-texto-principal);
 }
 
 .insumos-header {
-    font-size: 2rem;
+    font-size: 2.8rem; /* Título maior */
     font-weight: 700;
-    color: var(--cor-texto-principal);
+    color: var(--cor-texto-titulo);
+    margin-top: 2.5rem; /* Margem superior para alinhar */
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem; /* Espaço maior para o ícone */
+    justify-content: center; /* Centraliza o título */
+    /* Adicionado padding horizontal para alinhar com o MainLayout */
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
 }
+.insumos-header svg {
+    color: var(--cor-primaria); /* Ícone em dourado */
+    font-size: 3.2rem; /* Ícone maior */
+}
+
 
 .insumos-subheader {
     color: var(--cor-texto-secundario);
     margin-bottom: 2rem;
+    text-align: center; /* Centraliza o subtítulo */
+    /* Adicionado padding horizontal para alinhar com o MainLayout */
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
 }
 
 .insumo-card {
-    background-color: var(--cor-card);
+    background-color: var(--cor-card-fundo);
     border: 1px solid var(--cor-borda);
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(139, 69, 19, 0.08);
+    border-radius: 1rem; /* Mais arredondado */
+    box-shadow: var(--sombra-media); /* Sombra mais forte para card principal */
     margin-bottom: 2rem;
+    /* Centraliza o card principal */
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2.5rem; /* Adiciona padding interno */
 }
 
 .insumo-card-header {
-    padding: 1rem 1.5rem;
+    padding: 1.5rem; /* Mais padding */
     border-bottom: 1px solid var(--cor-borda);
 }
 
 .insumo-card-title {
-    font-size: 1.25rem;
+    font-size: 1.5rem; /* Título do card maior */
     font-weight: 600;
     color: var(--cor-texto-principal);
 }
 
 .insumo-card-content {
-    padding: 1.5rem;
+    padding: 2rem; /* Mais padding */
 }
 
 .form-grid {
@@ -69,95 +109,215 @@
 .form-group.col-span-2 { grid-column: span 2; }
 
 .form-group label {
-    font-size: 0.875rem;
+    font-size: 0.9rem; /* Tamanho ajustado */
     font-weight: 500;
     color: var(--cor-texto-secundario);
     margin-bottom: 0.5rem;
 }
 
 .form-group input, .form-group select {
-    padding: 0.75rem;
-    border-radius: 8px;
+    padding: 0.8rem 1rem; /* Padding ajustado */
+    border-radius: 0.5rem; /* Mais arredondado */
     border: 1px solid var(--cor-borda);
     font-size: 1rem;
     transition: all 0.2s ease;
+    background-color: #fcfcfc;
+    color: var(--cor-texto-principal);
 }
 
 .form-group input:focus, .form-group select:focus {
     outline: none;
-    border-color: var(--cor-primaria);
-    box-shadow: 0 0 0 3px rgba(255, 192, 203, 0.4);
+    border-color: var(--cor-primaria-hover); /* Cor primária para foco */
+    box-shadow: 0 0 0 3px rgba(168, 125, 75, 0.2);
 }
 
 .form-actions {
     grid-column: span 4;
     display: flex;
     justify-content: flex-end;
+    gap: 1rem; /* Espaço entre botões */
+    margin-top: 1rem; /* Margem superior para separar dos campos */
 }
 
 .btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
+    padding: 0.8rem 1.8rem; /* Padding ajustado */
+    font-size: 1rem; /* Tamanho ajustado */
     font-weight: bold;
     border: none;
-    border-radius: 8px;
+    border-radius: 0.75rem; /* Mais arredondado */
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    box-shadow: var(--sombra-leve);
 }
 
 .btn-primary {
-    /* CORREÇÃO: Botão com fundo rosa e texto marrom, mais harmonioso */
-    background-color: var(--cor-primaria);
-    color: var(--cor-texto-principal);
+    background-color: var(--cor-primaria); /* Dourado */
+    color: white;
 }
 .btn-primary:hover {
     background-color: var(--cor-primaria-hover);
-    box-shadow: 0 4px 10px rgba(255, 182, 193, 0.5);
+    box-shadow: var(--sombra-media);
+    transform: translateY(-2px);
 }
 
 .insumos-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 2rem; /* Mais margem superior */
+    background-color: var(--cor-card-fundo); /* Fundo branco para a tabela */
+    border-radius: 1rem; /* Bordas arredondadas */
+    overflow: hidden; /* Garante que bordas arredondadas funcionem com overflow */
+    box-shadow: var(--sombra-leve); /* Sombra para a tabela */
+    /* Centraliza a tabela */
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2.5rem; /* Adiciona padding interno */
 }
 
 .insumos-table th, .insumos-table td {
-    padding: 1rem;
+    padding: 1rem 1.5rem; /* Padding ajustado */
     text-align: left;
     border-bottom: 1px solid var(--cor-borda);
+    color: var(--cor-texto-principal);
 }
 
 .insumos-table thead {
-    background-color: var(--cor-fundo);
+    background-color: var(--cor-primaria-claro); /* Fundo dourado claro para cabeçalho */
 }
 
 .insumos-table th {
-    color: var(--cor-texto-secundario);
-    font-size: 0.75rem;
+    color: var(--cor-texto-titulo); /* Texto mais escuro para cabeçalho */
+    font-size: 0.8rem; /* Tamanho ajustado */
     text-transform: uppercase;
+    font-weight: 600;
 }
 
-.action-buttons { display: flex; gap: 1rem; }
-.action-buttons button { background: none; border: none; cursor: pointer; padding: 0.25rem; transition: transform 0.2s; }
-.action-buttons button:hover { transform: scale(1.2); }
-.edit-btn { color: var(--cor-sucesso); }
-.delete-btn { color: var(--cor-perigo); }
+.action-buttons { display: flex; gap: 0.5rem; /* Espaço menor para botões de ação na tabela */ }
+.action-buttons button { 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    padding: 0.4rem; /* Padding menor */
+    border-radius: 50%; /* Botões circulares */
+    transition: background-color 0.2s, transform 0.2s; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.action-buttons button:hover { background-color: rgba(0,0,0,0.05); transform: scale(1.1); }
+.edit-btn { color: var(--cor-info); } /* Azul para editar */
+.delete-btn { color: var(--cor-erro); } /* Vermelho para deletar */
 
-/* Modal de Edição */
+/* Modal de Edição (revisado para consistência) */
 .modal-backdrop {
-    position: fixed; inset: 0; background-color: rgba(90, 42, 12, 0.5);
-    display: flex; justify-content: center; align-items: center; z-index: 50;
-    backdrop-filter: blur(4px);
+    position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.6); /* Fundo mais escuro */
+    display: flex; justify-content: center; align-items: center; z-index: 1000;
+    backdrop-filter: blur(5px);
 }
 .modal-content {
-    background-color: var(--cor-card); padding: 2rem; border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); width: 100%; max-width: 500px;
+    background-color: var(--cor-card-fundo); padding: 2.5rem; border-radius: 1rem; /* Mais arredondado */
+    box-shadow: var(--sombra-modal); width: 100%; max-width: 500px;
+    border: 1px solid var(--cor-borda); /* Borda sutil */
 }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-.modal-title { font-size: 1.5rem; font-weight: 600; color: var(--cor-texto-principal); }
-.modal-close-btn { background: none; border: none; cursor: pointer; color: var(--cor-texto-secundario); }
+.modal-title { font-size: 1.8rem; font-weight: 700; color: var(--cor-texto-principal); }
+.modal-close-btn { 
+    background: none; border: none; cursor: pointer; 
+    color: var(--cor-texto-secundario); font-size: 2rem; /* Ícone maior */
+    transition: color 0.2s ease;
+}
+.modal-close-btn:hover { color: var(--cor-erro); }
 .modal-footer { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; }
-.btn-secondary { background-color: #e9ecef; color: #495057; }
-.btn-secondary:hover { background-color: #dee2e6; }
+.btn-secondary { 
+    background-color: #e0e0e0; color: var(--cor-texto-principal); /* Cinza suave */
+    padding: 0.8rem 1.5rem; border-radius: 0.75rem; font-weight: 600; /* Ajustado */
+    box-shadow: var(--sombra-leve);
+}
+.btn-secondary:hover { background-color: #c0c0c0; transform: translateY(-2px); box-shadow: var(--sombra-media); }
+
+
+/* Responsividade */
+@media (max-width: 992px) { /* Tablets */
+    .insumos-container {
+        padding: 1.5rem; /* Reduz padding geral */
+    }
+    .insumos-header {
+        font-size: 2.2rem;
+        flex-direction: column; /* Quebra título e ícone em linha */
+        align-items: center;
+        text-align: center;
+        padding: 0 1.5rem; /* Ajuste padding */
+    }
+    .insumos-header svg {
+        font-size: 2.5rem;
+    }
+    .insumos-subheader {
+        font-size: 0.95rem;
+        padding: 0 1.5rem; /* Ajuste padding */
+    }
+    .insumo-card {
+        padding: 0 1.5rem; /* Ajuste padding */
+    }
+    .insumo-card-header {
+        padding: 1rem;
+    }
+    .insumo-card-title {
+        font-size: 1.2rem;
+    }
+    .insumo-card-content {
+        padding: 1rem;
+    }
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas em mobile */
+        gap: 1rem;
+    }
+    .form-group.col-span-2 { grid-column: span 2; } /* Mantém 2 colunas */
+    .form-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.7rem 1rem;
+    }
+    .insumos-table th, .insumos-table td {
+        padding: 0.8rem;
+        font-size: 0.8rem;
+    }
+    .action-buttons button {
+        padding: 0.3rem;
+    }
+    .modal-content {
+        padding: 1.5rem;
+    }
+    .modal-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) { /* Mobile Pequeno */
+    .insumos-container {
+        padding: 1rem;
+    }
+    .insumos-header {
+        font-size: 1.8rem;
+    }
+    .insumos-header svg {
+        font-size: 2rem;
+    }
+    .insumos-subheader {
+        font-size: 0.9rem;
+    }
+    .form-grid {
+        grid-template-columns: 1fr; /* 1 coluna em celulares pequenos */
+    }
+    .form-group.col-span-2 { grid-column: span 1; } /* Redefine para 1 coluna */
+    .insumos-table th, .insumos-table td {
+        font-size: 0.75rem;
+    }
+}

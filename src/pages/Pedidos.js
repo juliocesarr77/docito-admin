@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import { collection, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy as firebaseOrderBy, addDoc, serverTimestamp } from 'firebase/firestore'; 
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-// Removido 'Printer' e mantido 'Download'
 import { Pencil, Trash, ArrowUp, Clock, Factory, PackageCheck, CheckCircle, DollarSign, PiggyBank, Eye, HelpCircle, Palette, Download } from 'lucide-react'; 
 import './Pedidos.css';
 import { format, differenceInDays, parseISO } from 'date-fns'; 
@@ -14,8 +13,8 @@ import { ptBR } from 'date-fns/locale';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Importa a biblioteca html2pdf
 import html2pdf from 'html2pdf.js';
+import ConfirmationModal from '../components/ConfirmationModal'; // Importa o novo modal de confirmação
 
 const Pedidos = () => {
     const { db } = useAuth();
@@ -29,6 +28,11 @@ const Pedidos = () => {
     const [pedidoParaPagar, setPedidoParaPagar] = useState(null);
     const [formaPagamentoSelecionada, setFormaPagamentoSelecionada] = useState('');
     const [isUpdatingStatus, setIsUpdatingStatus] = useState(false); 
+
+    // NOVO: Estados para o modal de confirmação
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null); // 'excluir' ou 'voltar_pendente'
+    const [pedidoParaConfirmar, setPedidoParaConfirmar] = useState(null);
 
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [pedidosPorPagina] = useState(9); 
@@ -62,11 +66,13 @@ const Pedidos = () => {
         console.log(`Clicado para avançar pedido ID: ${pedido.id}, Status Atual: ${statusAtual}, Próximo Status: ${proximo}`);
         console.log('Dados do Pedido:', pedido);
 
+        // Se o status atual for 'entregue', pede confirmação para voltar para 'pendente'
         if (statusAtual === 'entregue') {
-            const confirmar = window.confirm('O pedido já foi entregue. Deseja realmente mudar o status para "pendente" novamente?');
-            if (!confirmar) return;
-            atualizarStatusNoFirebase(pedido.id, 'pendente', pedido);
+            setPedidoParaConfirmar(pedido);
+            setConfirmAction('voltar_pendente');
+            setShowConfirmModal(true); // Mostra o modal customizado
         } 
+        // Se o próximo status é 'entregue'
         else if (proximo === 'entregue') {
             if (pedido.statusPagamento === 'Pago' || !pedido.statusPagamento || (pedido.saldoDevedor || 0) <= 0) { 
                 console.log('Pedido já pago ou sem status de pagamento. Avançando diretamente para Entregue.');
@@ -82,12 +88,14 @@ const Pedidos = () => {
                 atualizarStatusNoFirebase(pedido.id, proximo, pedido);
             }
         } 
+        // Para outros avanços de status (pendente -> produção -> pronto)
         else {
             console.log('Avançando status normal (não é entrega).');
             atualizarStatusNoFirebase(pedido.id, proximo, pedido);
         }
     };
 
+    // Função para atualizar status no Firebase e registrar no fluxo de caixa
     const atualizarStatusNoFirebase = async (id, novoStatus, pedidoCompleto, formaPagamento = null) => {
         setIsUpdatingStatus(true);
         console.log(`Iniciando atualização para pedido ID: ${id}, Novo Status: ${novoStatus}, Forma Pagamento: ${formaPagamento}`);
@@ -148,20 +156,52 @@ const Pedidos = () => {
             setShowPagamentoModal(false); 
             setPedidoParaPagar(null);
             setFormaPagamentoSelecionada('');
+            setShowConfirmModal(false); // Fecha o modal de confirmação se estava aberto
+            setPedidoParaConfirmar(null);
+            setConfirmAction(null);
         }
     };
 
-    const excluirPedido = async (id) => {
-        if (window.confirm('Deseja excluir este pedido?')) {
-            try { 
-                await deleteDoc(doc(db, 'pedidos', id)); 
-                toast.success('Pedido excluído com sucesso!');
-            } 
-            catch (error) { 
-                console.error('Erro ao excluir pedido:', error); 
-                toast.error(`Falha ao excluir pedido: ${error.message || 'Erro desconhecido'}`);
-            }
+    // NOVO: Função para lidar com a confirmação de exclusão
+    const handleExcluirPedidoClick = (pedido) => {
+        setPedidoParaConfirmar(pedido);
+        setConfirmAction('excluir');
+        setShowConfirmModal(true);
+    };
+
+    // NOVO: Função que executa a exclusão após a confirmação do modal
+    const executeExcluirPedido = async () => {
+        if (!db || !pedidoParaConfirmar) return;
+        setIsUpdatingStatus(true); // Usa o mesmo estado de loading para desabilitar botões
+        try { 
+            await deleteDoc(doc(db, 'pedidos', pedidoParaConfirmar.id)); 
+            toast.success('Pedido excluído com sucesso!');
+        } 
+        catch (error) { 
+            console.error('Erro ao excluir pedido:', error); 
+            toast.error(`Falha ao excluir pedido: ${error.message || 'Erro desconhecido'}`);
+        } finally {
+            setIsUpdatingStatus(false);
+            setShowConfirmModal(false);
+            setPedidoParaConfirmar(null);
+            setConfirmAction(null);
         }
+    };
+
+    // NOVO: Lógica de confirmação do modal
+    const handleConfirmAction = () => {
+        if (confirmAction === 'excluir') {
+            executeExcluirPedido();
+        } else if (confirmAction === 'voltar_pendente') {
+            atualizarStatusNoFirebase(pedidoParaConfirmar.id, 'pendente', pedidoParaConfirmar);
+        }
+    };
+
+    // NOVO: Lógica para cancelar a ação do modal de confirmação
+    const handleCancelConfirm = () => {
+        setShowConfirmModal(false);
+        setPedidoParaConfirmar(null);
+        setConfirmAction(null);
     };
     
     const contarPorStatus = (status) => pedidos.filter((p) => p.status === status).length;
@@ -234,9 +274,7 @@ const Pedidos = () => {
         }
     };
 
-    // FUNÇÃO ATUALIZADA: para gerar o PDF do pedido (COMPACTO)
     const generatePdfForOrder = (pedido) => {
-        // Estilos CSS embutidos para um visual compacto e limpo
         const pdfStyles = `
             <style>
                 body { 
@@ -244,46 +282,45 @@ const Pedidos = () => {
                     margin: 0; 
                     padding: 0; 
                     box-sizing: border-box; 
-                    font-size: 10px; /* Fonte base ainda menor */
+                    font-size: 10px; 
                     color: #333;
                     line-height: 1.3;
                 }
                 .pdf-container { 
-                    width: 250px; /* Largura reduzida para parecer um cupom/comprovante */
-                    padding: 10px; /* Padding menor */
-                    border: 1px dashed #ddd; /* Borda tracejada suave */
+                    width: 250px; 
+                    padding: 10px; 
+                    border: 1px dashed #ddd; 
                     box-sizing: border-box; 
                     margin: 0 auto; 
                 }
                 .pdf-header { 
                     text-align: center; 
-                    margin-bottom: 10px; /* Margem menor */
-                    border-bottom: 1px solid #bbb; /* Linha sólida mais discreta */
-                    padding-bottom: 8px; /* Padding menor */
+                    margin-bottom: 10px; 
+                    border-bottom: 1px solid #bbb; 
+                    padding-bottom: 8px; 
                 }
                 .pdf-header h1 { 
-                    font-size: 16px; /* Título menor */
+                    font-size: 16px; 
                     color: #A87D4B; 
                     margin: 0; 
                     font-weight: bold;
                 }
                 .pdf-section { 
-                    margin-bottom: 10px; /* Margem menor */
-                    padding-bottom: 8px; /* Padding menor */
+                    margin-bottom: 10px; 
+                    padding-bottom: 8px; 
                     border-bottom: 1px dashed #eee; 
                 }
                 .pdf-section h2 { 
-                    font-size: 12px; /* Título de seção menor */
+                    font-size: 12px; 
                     color: #5C4F42; 
-                    margin: 0 0 5px 0; /* Margem ajustada */
+                    margin: 0 0 5px 0; 
                     font-weight: bold; 
                 }
-                .pdf-section p { margin: 0 0 2px 0; } /* Margem muito pequena para parágrafos */
+                .pdf-section p { margin: 0 0 2px 0; }
                 .pdf-section strong { color: #36261B; font-weight: bold; }
                 .pdf-final-info { text-align: center; margin-top: 15px; font-size: 9px; color: #8B7A6C; }
                 .pdf-id { font-size: 8px; text-align: center; margin-top: 3px; color: #8B7A6C; }
 
-                /* Estilos para alinhar como no card do site (simulado) */
                 .info-line { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2px; }
                 .info-label { font-weight: bold; margin-right: 5px; color: #36261B; }
                 .info-value { text-align: right; flex-grow: 1; }
@@ -291,11 +328,10 @@ const Pedidos = () => {
             </style>
         `;
 
-        // Conteúdo HTML que será convertido para PDF
         const contentHtml = `
             <div class="pdf-container">
                 <div class="pdf-header">
-                    <h1>ORDEM DE SERVIÇO</h1>
+                    <h1>ORÇAMENTO DOCITO</h1>
                     <p style="font-size: 10px; margin: 5px 0 0 0;">Pedido #${pedido.id.substring(0, 8).toUpperCase()}</p>
                 </div>
 
@@ -338,22 +374,21 @@ const Pedidos = () => {
                     <h2>ENTREGA</h2>
                     <p><strong>Data:</strong> ${pedido.dataEntrega ? format(parseISO(pedido.dataEntrega), 'dd/MM/yyyy', { locale: ptBR }) : 'N/A'}</p>
                     <p><strong>Hora:</strong> ${pedido.horaEntrega || 'N/A'}</p>
-                    <p><strong>Status Pedido:</strong> ${pedido.status || 'N/A'}</p>
+                    <p><strong>Status:</strong> ${pedido.status || 'N/A'}</p>
                 </div>
 
                 <p class="pdf-final-info">Obrigado por sua preferência!</p>
             </div>
         `;
 
-        // Combina estilos e conteúdo
         const fullContent = pdfStyles + contentHtml;
 
         const opt = {
-            margin:       [3, 3, 3, 3], // Margens ainda menores para economizar espaço
+            margin:       [3, 3, 3, 3],
             filename:     `docito_pedido_${pedido.nome.replace(/\s/g, '_').toLowerCase().substring(0, 10)}_${pedido.id.substring(0, 5)}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 3, useCORS: true }, // Aumenta a escala para melhor qualidade em tamanhos pequenos
-            jsPDF:        { unit: 'mm', format: [80, 150], orientation: 'portrait' } // Formato de cupom: 80mm de largura por 150mm de altura
+            html2canvas:  { scale: 3, useCORS: true },
+            jsPDF:        { unit: 'mm', format: [80, 150], orientation: 'portrait' } 
         };
 
         html2pdf().from(fullContent).set(opt).save();
@@ -429,11 +464,10 @@ const Pedidos = () => {
                                     </div>
                                     <div className="action-buttons">
                                         <button onClick={() => navigate(`/editar-pedido/${pedido.id}`, { state: { pedido } })} className="home-button-editar" title="Editar Pedido" disabled={isUpdatingStatus}><Pencil size={16} /></button>
-                                        <button onClick={() => excluirPedido(pedido.id)} className="home-button-excluir" title="Excluir Pedido" disabled={isUpdatingStatus}><Trash size={16} /></button>
+                                        <button onClick={() => handleExcluirPedidoClick(pedido)} className="home-button-excluir" title="Excluir Pedido" disabled={isUpdatingStatus}><Trash size={16} /></button> {/* Chama handleExcluirPedidoClick */}
                                         <button onClick={() => handleAtualizarStatusClick(pedido)} className="home-button-avancar" title="Avançar status" disabled={isUpdatingStatus}>
                                             <ArrowUp size={16} />
                                         </button>
-                                        {/* NOVO BOTÃO: Gerar PDF */}
                                         <button onClick={() => generatePdfForOrder(pedido)} className="home-button-pdf" title="Gerar PDF do Pedido" disabled={isUpdatingStatus}>
                                             <Download size={16} />
                                         </button>
@@ -498,6 +532,23 @@ const Pedidos = () => {
                     </div>
                 </div>
             )}
+
+            {/* NOVO: Modal de Confirmação Customizado */}
+            <ConfirmationModal
+                show={showConfirmModal}
+                title={confirmAction === 'excluir' ? 'Confirmar Exclusão' : 'Mudar Status do Pedido'}
+                message={
+                    confirmAction === 'excluir' 
+                        ? `Tem certeza que deseja EXCLUIR o pedido de ${pedidoParaConfirmar?.nome}? Esta ação é irreversível.`
+                        : `O pedido de ${pedidoParaConfirmar?.nome} já foi entregue. Deseja realmente mudar o status para "Pendente" novamente?`
+                }
+                onConfirm={handleConfirmAction}
+                onCancel={handleCancelConfirm}
+                isLoading={isUpdatingStatus}
+                confirmText={confirmAction === 'excluir' ? 'Sim, Excluir' : 'Sim, Mudar'}
+                cancelText="Cancelar"
+                iconType={confirmAction === 'excluir' ? 'error' : 'warning'} /* 'error' para excluir, 'warning' para mudança de status */
+            />
         </div>
     );
 };

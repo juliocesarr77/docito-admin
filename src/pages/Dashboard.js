@@ -1,13 +1,12 @@
 // src/pages/Dashboard.js
 
 import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom'; // 'Link' foi removido desta importação
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { collection, onSnapshot } from 'firebase/firestore'; 
-// Ícones usados: Book, ChefHat, FilePlus, ListChecks, Calendar, DollarSign.
-// 'Calculator' foi removido daqui pois não é usado diretamente no JSX atual.
-import { Book, ChefHat, FilePlus, ListChecks, Calendar, DollarSign } from 'lucide-react'; 
-import { format, parseISO, startOfWeek, endOfWeek } from 'date-fns'; 
+// CORREÇÃO: Adicionado PackageCheck e Clock à importação de lucide-react
+import { Book, ChefHat, FilePlus, ListChecks, Calendar, DollarSign, TrendingUp, TrendingDown, Info, Wallet, PackageCheck, Clock } from 'lucide-react'; 
+import { format, parseISO, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns'; 
 import { ptBR } from 'date-fns/locale';
 import './Dashboard.css';
 
@@ -15,26 +14,100 @@ function Dashboard() {
   const { currentUser, db, logout } = useAuth();
   const navigate = useNavigate();
   const [pedidos, setPedidos] = useState([]);
-  const [loadingPedidos, setLoadingPedidos] = useState(true);
+  const [transacoesFluxo, setTransacoesFluxo] = useState([]); // NOVO: Estado para transações do fluxo de caixa
+  const [loadingData, setLoadingData] = useState(true); // Controla carregamento geral
 
   useEffect(() => {
     if (!db) {
-      setLoadingPedidos(false);
+      setLoadingData(false);
       return;
     }
 
-    const q = collection(db, 'pedidos'); 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    // Listener para Pedidos
+    const unsubscribePedidos = onSnapshot(collection(db, 'pedidos'), (snapshot) => {
       const lista = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setPedidos(lista);
-      setLoadingPedidos(false);
+      // Pode ser ajustado se o fluxo de caixa carregar mais lentamente, ou usar Promise.all
+      // setLoadingData(false); 
     }, (error) => {
       console.error('Erro ao buscar pedidos:', error);
       setPedidos([]);
-      setLoadingPedidos(false);
+      setLoadingData(false);
     });
-    return () => unsubscribe();
+
+    // NOVO: Listener para Transações do Fluxo de Caixa
+    const unsubscribeFluxo = onSnapshot(collection(db, 'fluxoDeCaixa'), (snapshot) => {
+        const lista = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setTransacoesFluxo(lista);
+        // Agora, podemos definir loadingData para false aqui, ou coordenar melhor
+        setLoadingData(false); 
+    }, (error) => {
+        console.error('Erro ao buscar transações do fluxo de caixa:', error);
+        setTransacoesFluxo([]);
+        setLoadingData(false);
+    });
+
+    return () => {
+        unsubscribePedidos();
+        unsubscribeFluxo(); // Limpar listener do fluxo de caixa
+    };
   }, [db]);
+
+  // NOVO: Métricas Calculadas com useMemo
+  const dashboardMetrics = useMemo(() => {
+    const hoje = new Date();
+    const inicioMes = startOfMonth(hoje);
+    const fimMes = endOfMonth(hoje);
+
+    // Métricas de Pedidos
+    const totalPedidosAtivos = pedidos.filter(p => p.status !== 'entregue').length;
+    const pedidosEntreguesMes = pedidos.filter(p => {
+        if (p.status !== 'entregue' || !p.dataPagamento) return false;
+        // Garante que p.dataPagamento é um objeto Timestamp antes de chamar toDate()
+        const dataPagamento = p.dataPagamento.toDate ? p.dataPagamento.toDate() : new Date(p.dataPagamento); 
+        return dataPagamento >= inicioMes && dataPagamento <= fimMes;
+    }).length;
+
+    const pedidosPorStatus = {
+        pendente: pedidos.filter(p => p.status === 'pendente').length,
+        emProducao: pedidos.filter(p => p.status === 'em produção').length,
+        pronto: pedidos.filter(p => p.status === 'pronto').length,
+        entregue: pedidos.filter(p => p.status === 'entregue').length,
+        total: pedidos.length
+    };
+
+    // Métricas Financeiras
+    const saldoGeralCaixa = transacoesFluxo.reduce((acc, transacao) => {
+        if (transacao.tipo === 'receita') return acc + (transacao.valor || 0);
+        if (transacao.tipo === 'saida') return acc - (transacao.valor || 0);
+        return acc;
+    }, 0);
+
+    const receitasMesAtual = transacoesFluxo.filter(t => {
+        if (t.tipo !== 'receita' || !t.data) return false;
+        const dataTransacao = t.data.toDate ? t.data.toDate() : new Date(t.data);
+        return dataTransacao >= inicioMes && dataTransacao <= fimMes;
+    }).reduce((sum, t) => sum + (t.valor || 0), 0);
+
+    const despesasMesAtual = transacoesFluxo.filter(t => {
+        if (t.tipo !== 'saida' || !t.data) return false;
+        const dataTransacao = t.data.toDate ? t.data.toDate() : new Date(t.data);
+        return dataTransacao >= inicioMes && dataTransacao <= fimMes;
+    }).reduce((sum, t) => sum + (t.valor || 0), 0);
+    
+    const balancoMesAtual = receitasMesAtual - despesasMesAtual;
+
+    return {
+      totalPedidosAtivos,
+      pedidosEntreguesMes,
+      pedidosPorStatus,
+      saldoGeralCaixa,
+      receitasMesAtual,
+      despesasMesAtual,
+      balancoMesAtual
+    };
+  }, [pedidos, transacoesFluxo]);
+
 
   const pedidosDaSemana = useMemo(() => {
     if (!pedidos.length) return [];
@@ -75,12 +148,85 @@ function Dashboard() {
     }
   };
 
+  if (loadingData) {
+    return <div className="loading-container">Carregando Painel de Controle...</div>;
+  }
+
   return (
     <div className="admin-dashboard-container">
       <h1 className="admin-dashboard-title">Painel de Controle Docito</h1>
       <p className="admin-welcome-message">
         Bem-vindo(a), <strong>{currentUser?.displayName || currentUser?.email || 'Admin'}</strong>!
       </p>
+
+      {/* Seção de Métricas do Dashboard */}
+      <div className="dashboard-metrics-grid">
+        <div className="metric-card primary">
+          <div className="metric-icon"><Wallet size={36}/></div>
+          <div className="metric-content">
+            <h3>Saldo em Caixa</h3>
+            <p className="value">{dashboardMetrics.saldoGeralCaixa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+          </div>
+        </div>
+
+        <div className="metric-card success">
+          <div className="metric-icon"><TrendingUp size={36}/></div>
+          <div className="metric-content">
+            <h3>Receitas (Mês)</h3>
+            <p className="value">{dashboardMetrics.receitasMesAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+          </div>
+        </div>
+
+        <div className="metric-card error">
+          <div className="metric-icon"><TrendingDown size={36}/></div>
+          <div className="metric-content">
+            <h3>Despesas (Mês)</h3>
+            <p className="value">{dashboardMetrics.despesasMesAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+          </div>
+        </div>
+
+        <div className={`metric-card ${dashboardMetrics.balancoMesAtual >= 0 ? 'info' : 'error'}`}>
+          <div className="metric-icon"><DollarSign size={36}/></div>
+          <div className="metric-content">
+            <h3>Balanço (Mês)</h3>
+            <p className="value">{dashboardMetrics.balancoMesAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+          </div>
+        </div>
+
+        <div className="metric-card secondary">
+          <div className="metric-icon"><ListChecks size={36}/></div>
+          <div className="metric-content">
+            <h3>Pedidos Ativos</h3>
+            <p className="value">{dashboardMetrics.totalPedidosAtivos}</p>
+          </div>
+        </div>
+
+        <div className="metric-card secondary">
+          <div className="metric-icon"><PackageCheck size={36}/></div>
+          <div className="metric-content">
+            <h3>Pedidos Entregues (Mês)</h3>
+            <p className="value">{dashboardMetrics.pedidosEntreguesMes}</p>
+          </div>
+        </div>
+
+        <div className="metric-card secondary">
+          <div className="metric-icon"><Info size={36}/></div>
+          <div className="metric-content">
+            <h3>Pedidos Prontos</h3>
+            <p className="value">{dashboardMetrics.pedidosPorStatus.pronto}</p>
+          </div>
+        </div>
+
+         <div className="metric-card secondary">
+          <div className="metric-icon"><Clock size={36}/></div>
+          <div className="metric-content">
+            <h3>Pedidos Pendentes</h3>
+            <p className="value">{dashboardMetrics.pedidosPorStatus.pendente}</p>
+          </div>
+        </div>
+        
+      </div>
+
 
       <div className="admin-nav-container">
         <button onClick={() => navigate('/novo-pedido')} className="admin-nav-button" style={{backgroundColor: '#D7BDE2', color: '#6A1B9A'}}>
@@ -94,10 +240,8 @@ function Dashboard() {
         <button onClick={() => navigate('/insumos')} className="admin-nav-button" style={{backgroundColor: '#FFDAB9', color: '#8B4513'}}><Book size={20}/> Gestão de Insumos</button>
         <button onClick={() => navigate('/receitas')} className="admin-nav-button" style={{backgroundColor: '#C1E1C1', color: '#2E8B57'}}><ChefHat size={20}/> Fichas Técnicas</button>
         <button onClick={() => navigate('/precificacao')} className="admin-nav-button" style={{backgroundColor: '#B0E0E6', color: '#4682B4'}}>
-            {/* Removido o ícone Calculator daqui, pois ele não foi importado na lista reduzida. */}
             Precificação Detalhada
         </button>
-        {/* Botão para Fluxo de Caixa */}
         <button onClick={() => navigate('/fluxo-de-caixa')} className="admin-nav-button" style={{backgroundColor: '#FFF2CC', color: '#B8860B'}}>
             <DollarSign size={20}/> Fluxo de Caixa
         </button>
@@ -105,23 +249,19 @@ function Dashboard() {
 
       <div className="weekly-orders-section">
         <h2 className="weekly-orders-title"><Calendar size={20}/> Pedidos da Semana ({pedidosDaSemana.length})</h2>
-        {loadingPedidos ? (
-          <p>Carregando pedidos da semana...</p>
+        {pedidosDaSemana.length > 0 ? (
+          <ul className="weekly-orders-list">
+            {pedidosDaSemana.map(pedido => (
+              <li key={pedido.id} className="weekly-order-item">
+                <p><strong>{pedido.nome}</strong></p>
+                <p>Produto: {pedido.produto}</p>
+                <p>Entrega: {pedido.dataEntrega ? format(parseISO(pedido.dataEntrega), 'EEEE, dd/MM', { locale: ptBR }) : 'N/A'} às {pedido.horaEntrega || 'N/A'}</p>
+                <p className={`status-${pedido.status?.toLowerCase().replace(/\s/g, '-')}`}>Status: {pedido.status}</p>
+              </li>
+            ))}
+          </ul>
         ) : (
-          pedidosDaSemana.length > 0 ? (
-            <ul className="weekly-orders-list">
-              {pedidosDaSemana.map(pedido => (
-                <li key={pedido.id} className="weekly-order-item">
-                  <p><strong>{pedido.nome}</strong></p>
-                  <p>Produto: {pedido.produto}</p>
-                  <p>Entrega: {pedido.dataEntrega ? format(parseISO(pedido.dataEntrega), 'EEEE, dd/MM', { locale: ptBR }) : 'N/A'} às {pedido.horaEntrega || 'N/A'}</p>
-                  <p className={`status-${pedido.status?.toLowerCase().replace(/\s/g, '-')}`}>Status: {pedido.status}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>Nenhum pedido agendado para esta semana. Que tal criar um novo?</p>
-          )
+          <p>Nenhum pedido agendado para esta semana. Que tal criar um novo?</p>
         )}
       </div>
 

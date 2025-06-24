@@ -1,0 +1,169 @@
+/* src/components/ConfirmationModal.css */
+
+/* As variáveis de cor devem ser idênticas às dos seus :root em outras páginas */
+:root {
+    --cor-fundo-pagina: #FDFBFA;
+    --cor-card-fundo: #FFFFFF;
+    --cor-borda: #E8E2DA;
+    --cor-texto-titulo: #36261B;
+    --cor-texto-principal: #5C4F42;
+    --cor-texto-secundario: #8B7A6C;
+    --cor-primaria: #A87D4B;
+    --cor-primaria-hover: #C59A67;
+    --cor-primaria-claro: #F5E8D8;
+    --cor-sucesso: #5FA85D;
+    --cor-erro: #D9534F;
+    --cor-alerta: #E6B800; /* Amarelo para avisos/warning */
+    --cor-info: #5BC0DE;
+
+    --sombra-modal: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+.modal-backdrop-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.65); /* Fundo escuro e semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Garante que fique acima de tudo */
+    backdrop-filter: blur(5px); /* Efeito de desfoque */
+    animation: fadeIn 0.2s ease-out; /* Animação suave de entrada */
+}
+
+.modal-content-custom {
+    background-color: var(--cor-card-fundo);
+    border-radius: 1rem; /* Bordas arredondadas */
+    box-shadow: var(--sombra-modal); /* Sombra elegante */
+    padding: 2.5rem; /* Padding generoso */
+    width: 90%;
+    max-width: 450px; /* Largura máxima para manter compacto */
+    text-align: center;
+    position: relative;
+    border: 1px solid var(--cor-borda); /* Borda sutil */
+    animation: slideInFromTop 0.3s ease-out forwards; /* Animação de entrada do conteúdo */
+}
+
+.modal-close-btn-custom {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--cor-texto-secundario);
+    transition: color 0.2s ease;
+}
+.modal-close-btn-custom:hover {
+    color: var(--cor-erro);
+}
+
+.modal-icon-container {
+    margin: 0 auto 1.5rem; /* Centraliza o ícone e adiciona margem inferior */
+    color: var(--cor-alerta); /* Cor padrão para ícone de aviso */
+}
+
+/* Cores dos ícones baseadas no type (se usar mais tipos no JS) */
+.modal-icon-container.text-yellow-500 { color: var(--cor-alerta); }
+.modal-icon-container.text-red-500 { color: var(--cor-erro); } /* Exemplo para 'error' */
+
+
+.modal-title-custom {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cor-texto-titulo);
+    margin-bottom: 0.75rem;
+}
+
+.modal-message-custom {
+    font-size: 1rem;
+    color: var(--cor-texto-principal);
+    margin-bottom: 2rem; /* Mais espaço antes dos botões */
+    line-height: 1.5;
+}
+
+.modal-actions-custom {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Espaçamento entre os botões */
+    flex-wrap: wrap; /* Para responsividade */
+}
+
+.btn-confirm-custom,
+.btn-cancel-custom {
+    padding: 0.8rem 1.8rem;
+    border-radius: 0.75rem; /* Bordas suaves */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-confirm-custom {
+    background-color: var(--cor-erro); /* Vermelho para confirmação perigosa (exclusão) */
+    color: white;
+}
+.btn-confirm-custom:hover:not(:disabled) {
+    background-color: #C0392B; /* Vermelho mais escuro no hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.btn-confirm-custom:disabled {
+    background-color: #F0A3A0; /* Tom mais claro e dessaturado quando desabilitado */
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-cancel-custom {
+    background-color: var(--cor-borda); /* Cor neutra para cancelar */
+    color: var(--cor-texto-principal);
+}
+.btn-cancel-custom:hover:not(:disabled) {
+    background-color: #D3C1B0; /* Tom mais escuro de neutro */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.btn-cancel-custom:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInFromTop {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .modal-content-custom {
+        padding: 1.5rem;
+        max-width: 95%;
+    }
+    .modal-title-custom {
+        font-size: 1.5rem;
+    }
+    .modal-message-custom {
+        font-size: 0.9rem;
+    }
+    .modal-actions-custom {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .btn-confirm-custom, .btn-cancel-custom {
+        width: 100%;
+        padding: 0.7rem 1.5rem;
+    }
+}

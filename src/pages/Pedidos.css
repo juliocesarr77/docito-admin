@@ -1,11 +1,12 @@
 /* src/pages/Pedidos.css */
 
-/* Cores e fontes para o tema luxuoso (coerente com o dashboard e precificação) */
+/* Cores e fontes para o tema luxuoso (DEFINIÇÃO IDÊNTICA EM TODOS OS ARQUIVOS) */
 :root {
   --cor-fundo-pagina: #FDFBFA; /* Quase branco, suave */
   --cor-card-fundo: #FFFFFF;
   --cor-borda: #E8E2DA; /* Borda mais quente e suave */
-  --cor-texto-principal: #36261B; /* Marrom escuro profundo */
+  --cor-texto-titulo: #36261B; /* Marrom escuro profundo */
+  --cor-texto-principal: #5C4F42; /* Marrom médio para textos */
   --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
   
   --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
@@ -25,14 +26,16 @@
 
 body {
   background-color: var(--cor-fundo-pagina);
-  font-family: 'Georgia', serif; /* Coerente com as outras páginas */
+  font-family: 'Georgia', serif;
   color: var(--cor-texto-principal);
 }
 
 .dashboard-container {
-  padding: 2.5rem;
+  /* Ajustado para se integrar ao MainLayout */
+  padding: 0; /* Removendo padding daqui, pois MainLayout já adiciona padding ao main-content */
+  padding-bottom: 2.5rem; /* Adiciona padding no final da página */
   background-color: var(--cor-fundo-pagina);
-  min-height: 100vh;
+  min-height: calc(100vh - 5rem); /* Ajusta a altura mínima considerando padding do MainLayout */
   font-family: 'Georgia', serif;
   color: var(--cor-texto-principal);
 }
@@ -41,6 +44,7 @@ body {
   text-align: center;
   font-size: 2.8rem;
   font-weight: 700;
+  margin-top: 2.5rem; /* Margem superior para o título, alinhando com o padding do MainLayout */
   margin-bottom: 2.5rem;
   color: var(--cor-texto-principal);
   letter-spacing: -0.02em;
@@ -49,16 +53,21 @@ body {
 .status-table {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem; /* Mais espaço */
+  margin-bottom: 2rem;
   flex-wrap: wrap;
-  gap: 0.75rem; /* Mais espaço entre botões de status */
+  gap: 0.75rem;
+  /* Centraliza a tabela de status */
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2.5rem; /* Adiciona padding interno */
 }
 
 .status-table button {
   font-family: 'Georgia', serif;
-  padding: 0.9rem 1.2rem; /* Mais padding */
+  padding: 0.9rem 1.2rem;
   border: 1px solid var(--cor-borda);
-  border-radius: 0.75rem; /* Mais arredondado */
+  border-radius: 0.75rem;
   min-width: 170px;
   text-align: center;
   transition: all 0.3s ease;
@@ -70,55 +79,60 @@ body {
   gap: 0.6rem;
   font-weight: 600;
   box-shadow: var(--sombra-leve);
-  color: var(--cor-texto-principal); /* Cor padrão do texto */
+  color: var(--cor-texto-principal);
 }
 
 .status-table button:hover {
   transform: translateY(-3px);
   box-shadow: var(--sombra-media);
-  background-color: var(--cor-primaria-claro); /* Um fundo suave no hover */
+  background-color: var(--cor-primaria-claro);
 }
 
 .status-table button svg {
-  color: var(--cor-texto-secundario); /* Cor padrão dos ícones nos botões de status */
+  color: var(--cor-texto-secundario);
 }
 
 /* Cores específicas para os botões de status e seus ícones */
-.status-cell.pendente { background-color: #ffe0cc; } /* Laranja claro */
-.status-cell.pendente svg { color: #BF360C; } /* Laranja escuro */
+.status-cell.pendente { background-color: #ffe0cc; }
+.status-cell.pendente svg { color: #BF360C; }
 
-.status-cell.em-producao { background-color: #bbdefb; } /* Azul claro */
-.status-cell.em-producao svg { color: #1976D2; } /* Azul escuro */
+.status-cell.em-producao { background-color: #bbdefb; }
+.status-cell.em-producao svg { color: #1976D2; }
 
-.status-cell.pronto { background-color: #fff9c4; } /* Amarelo claro */
-.status-cell.pronto svg { color: #FBC02D; } /* Amarelo escuro */
+.status-cell.pronto { background-color: #fff9c4; }
+.status-cell.pronto svg { color: #FBC02D; }
 
-.status-cell.entregue { background-color: #c8e6c9; } /* Verde claro */
-.status-cell.entregue svg { color: #388E3C; } /* Verde escuro */
+.status-cell.entregue { background-color: #c8e6c9; }
+.status-cell.entregue svg { color: #388E3C; }
 
 .status-cell.ativo {
   font-weight: bold;
-  border: 2px solid var(--cor-primaria); /* Borda mais forte em dourado */
-  box-shadow: 0 0 0 4px rgba(168, 125, 75, 0.2); /* Sombra de foco em dourado */
+  border: 2px solid var(--cor-primaria);
+  box-shadow: 0 0 0 4px rgba(168, 125, 75, 0.2);
 }
 .status-cell.ativo svg {
-  color: var(--cor-primaria); /* Ícone também em dourado quando ativo */
+  color: var(--cor-primaria);
 }
 
 
 .status-count {
   font-weight: bold;
-  color: var(--cor-primaria); /* Cor do contador em dourado */
+  color: var(--cor-primaria);
   margin-left: 0.3rem;
 }
 
 .card-grid {
   display: grid;
-  gap: 2rem; /* Mais espaço entre cards */
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Cards maiores */
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   list-style: none;
   padding: 0;
-  margin-top: 2.5rem; /* Mais margem */
+  margin-top: 2.5rem;
+  /* Centraliza o grid de cards */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2.5rem;
 }
 
 .pedido-card {
@@ -127,15 +141,15 @@ body {
   border: 1px solid var(--cor-borda);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: left;
-  padding: 2rem; /* Mais padding */
-  border-radius: 1rem; /* Mais arredondado */
+  padding: 2rem;
+  border-radius: 1rem;
   box-shadow: var(--sombra-card);
-  display: flex; /* Para flexbox interno */
-  flex-direction: column; /* Coloca itens um abaixo do outro */
+  display: flex;
+  flex-direction: column;
 }
 
 .pedido-card:hover {
-  transform: translateY(-8px); /* Efeito de "levantar" mais pronunciado */
+  transform: translateY(-8px);
   box-shadow: var(--sombra-hover);
 }
 
@@ -148,12 +162,12 @@ body {
 
 .pedido-card > div > div:first-child {
   flex-grow: 1;
-  margin-right: 1.5rem; /* Espaçamento entre texto e botões */
+  margin-right: 1.5rem;
 }
 
 
 .cliente-nome {
-  font-size: 1.8rem; /* Nome do cliente maior */
+  font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
   color: var(--cor-texto-principal);
@@ -162,19 +176,23 @@ body {
 .dashboard-search {
   text-align: center;
   margin-bottom: 2rem;
+  /* Centraliza o campo de busca */
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2.5rem;
 }
 
 .dashboard-search input {
   font-family: 'Georgia', serif;
   width: 100%;
-  max-width: 600px; /* Campo de busca maior */
   padding: 0.9rem 1.2rem;
   border: 1px solid var(--cor-borda);
   border-radius: 0.75rem;
   font-size: 1.1rem;
   color: var(--cor-texto-principal);
   background-color: #fcfcfc;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sombra interna */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
   transition: all 0.2s ease;
 }
 .dashboard-search input:focus {
@@ -183,21 +201,22 @@ body {
   box-shadow: 0 0 0 3px rgba(168, 125, 75, 0.2);
 }
 
-/* Botões de ação do card (Editar, Excluir, Avançar) */
+/* Botões de ação do card (Editar, Excluir, Avançar, PDF) */
 .action-buttons {
   display: flex;
-  flex-direction: column; /* Coloca os botões um abaixo do outro */
-  gap: 0.75rem; /* Mais espaço entre eles */
+  flex-direction: column;
+  gap: 0.75rem;
   align-items: center;
-  margin-left: 1rem; /* Garante que haja espaço à esquerda */
+  margin-left: 1rem;
 }
 
 .home-button-editar,
 .home-button-excluir,
-.home-button-avancar {
-  border-radius: 50%; /* Botões circulares */
-  width: 48px; /* Maiores */
-  height: 48px; /* Maiores */
+.home-button-avancar,
+.home-button-pdf { /* Adicionado para estilizar o botão PDF */
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid var(--cor-borda);
@@ -207,25 +226,41 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.home-button-editar { background-color: #E8F5E9; } /* Verde claro */
-.home-button-editar svg { color: #388E3C; } /* Verde escuro */
+.home-button-editar { background-color: #E8F5E9; }
+.home-button-editar svg { color: #388E3C; }
 .home-button-editar:hover { background-color: #C8E6C9; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-.home-button-excluir { background-color: #FFEBEE; } /* Vermelho claro */
-.home-button-excluir svg { color: #D32F2F; } /* Vermelho escuro */
+.home-button-excluir { background-color: #FFEBEE; }
+.home-button-excluir svg { color: #D32F2F; }
 .home-button-excluir:hover { background-color: #FFCDD2; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-.home-button-avancar { background-color: #E3F2FD; } /* Azul claro */
-.home-button-avancar svg { color: #1976D2; } /* Azul escuro */
+.home-button-avancar { background-color: #E3F2FD; }
+.home-button-avancar svg { color: #1976D2; }
 .home-button-avancar:hover { background-color: #BBDEFB; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+/* Novo estilo para o botão PDF */
+.home-button-pdf { 
+  background-color: var(--cor-primaria-claro);
+  color: var(--cor-primaria);
+}
+.home-button-pdf:hover { 
+  background-color: var(--cor-primaria);
+  color: white; 
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+}
+.home-button-pdf:hover svg {
+  color: white;
+}
+
 
 /* Paginação */
 .dashboard-pagination {
   display: flex;
   justify-content: center;
   gap: 0.75rem;
-  margin-top: 3rem; /* Mais margem */
-  padding-bottom: 2rem; /* Padding no final da página */
+  margin-top: 3rem;
+  padding-bottom: 2rem;
 }
 
 .dashboard-pagination button {
@@ -260,17 +295,17 @@ body {
   gap: 0.5rem;
 }
 .dias-entrega {
-  font-size: 0.8rem; /* Tamanho ajustado */
+  font-size: 0.8rem;
   font-weight: bold;
-  padding: 4px 10px; /* Mais padding */
-  border-radius: 16px; /* Mais arredondado */
+  padding: 4px 10px;
+  border-radius: 16px;
   color: white;
   white-space: nowrap; 
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-.dias-entrega.urgente { background-color: var(--cor-erro); } /* Vermelho */
-.dias-entrega.atencao { background-color: var(--cor-alerta); } /* Amarelo/Laranja */
-.dias-entrega.tranquilo { background-color: var(--cor-sucesso); } /* Verde */
+.dias-entrega.urgente { background-color: var(--cor-erro); }
+.dias-entrega.atencao { background-color: var(--cor-alerta); }
+.dias-entrega.tranquilo { background-color: var(--cor-sucesso); }
 
 /* Estilos para as informações de pagamento nos cards */
 .text-green-600 { color: var(--cor-sucesso); }
@@ -292,28 +327,28 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.65); /* Fundo mais escuro */
+  background-color: rgba(0, 0, 0, 0.65);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Garante que o modal esteja acima de tudo */
-  backdrop-filter: blur(5px); /* Efeito de desfoque (moderno) */
+  z-index: 1000;
+  backdrop-filter: blur(5px);
 }
 
 .bg-white.p-8.rounded-lg.shadow-2xl {
   background-color: var(--cor-card-fundo);
-  padding: 2.5rem; /* Mais padding */
-  border-radius: 1rem; /* Mais arredondado */
-  box-shadow: var(--sombra-modal); /* Sombra mais elegante */
-  max-width: 28rem; /* Ligeiramente mais largo */
-  width: 90%; /* Responsivo */
-  margin: 0 1rem; /* Margem lateral em mobile */
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: var(--sombra-modal);
+  max-width: 28rem;
+  width: 90%;
+  margin: 0 1rem;
   text-align: center;
-  border: 1px solid var(--cor-borda); /* Borda sutil */
-  transform: scale(1); /* Garante que não haja transformação inicial para evitar problemas */
-  transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Transição para abertura */
-  opacity: 1; /* Garante que a opacidade seja 1 */
-  animation: fadeInScaleUp 0.3s ease-out forwards; /* Adiciona animação de entrada */
+  border: 1px solid var(--cor-borda);
+  transform: scale(1);
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 1;
+  animation: fadeInScaleUp 0.3s ease-out forwards;
 }
 
 /* Animação para o modal aparecer */
@@ -329,7 +364,7 @@ body {
 }
 
 .bg-white.p-8.rounded-lg.shadow-2xl h3 {
-  font-size: 1.8rem; /* Título do modal maior */
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--cor-texto-principal);
   margin-bottom: 0.75rem;
@@ -379,8 +414,8 @@ body {
 }
 
 .bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 button {
-  padding: 0.8rem 1.8rem; /* Botões maiores e mais elegantes */
-  border-radius: 0.75rem; /* Mais arredondados */
+  padding: 0.8rem 1.8rem;
+  border-radius: 0.75rem;
   font-weight: 600;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   transition: all 0.2s ease;
@@ -396,7 +431,7 @@ body {
   box-shadow: none;
 }
 .bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 .bg-gray-300 {
-  background-color: #e0e0e0; /* Cinza suave */
+  background-color: #e0e0e0;
   color: var(--cor-texto-principal);
 }
 .bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 .bg-gray-300:hover {
@@ -406,7 +441,7 @@ body {
   background-color: var(--cor-sucesso);
 }
 .bg-white.p-8.rounded-lg.shadow-2xl .flex.justify-center.gap-4 .bg-green-600:hover {
-  background-color: #4CAF50; /* Verde mais escuro */
+  background-color: #4CAF50;
 }
 
 /* Media Queries para Responsividade (adaptando as novas classes) */
@@ -446,15 +481,15 @@ body {
       margin-bottom: 1.5rem;
   }
   .status-table {
-      flex-direction: column; /* Botões de status em coluna */
+      flex-direction: column;
       gap: 0.5rem;
   }
   .status-table button {
       width: 100%;
-      min-width: unset; /* Remove min-width */
+      min-width: unset;
   }
   .card-grid {
-      grid-template-columns: 1fr; /* Uma coluna em mobile */
+      grid-template-columns: 1fr;
       gap: 1.25rem;
   }
   .pedido-card {
@@ -464,13 +499,13 @@ body {
       font-size: 1.4rem;
   }
   .action-buttons {
-      flex-direction: row; /* Volta a ser linha para economizar espaço em cards menores */
+      flex-direction: row;
       margin-top: 1rem;
       width: 100%;
       justify-content: center;
   }
   .action-buttons button {
-      width: 40px; /* Tamanho fixo para mobile */
+      width: 40px;
       height: 40px;
   }
   .dashboard-search input {
@@ -516,5 +551,457 @@ body {
   }
   .text-xs {
       font-size: 0.75rem;
+  }
+}
+
+
+/* src/pages/GerenciarReceitas.css (Que agora é ProdutosPrecificados.css) */
+
+/* Cores e fontes para o tema luxuoso (DEFINIÇÃO IDÊNTICA EM TODOS OS ARQUIVOS) */
+:root {
+  --cor-fundo-pagina: #FDFBFA; /* Quase branco, suave */
+  --cor-card-fundo: #FFFFFF;
+  --cor-borda: #E8E2DA; /* Borda mais quente e suave */
+  --cor-texto-titulo: #36261B; /* Marrom escuro profundo */
+  --cor-texto-principal: #5C4F42; /* Marrom médio para textos */
+  --cor-texto-secundario: #8B7A6C; /* Marrom claro para detalhes */
+  
+  --cor-primaria: #A87D4B; /* Dourado suave/Cobre elegante */
+  --cor-primaria-hover: #C59A67; /* Dourado mais claro para hover */
+  --cor-primaria-claro: #F5E8D8; /* Fundo claro para botões/destaque */
+
+  --cor-sucesso: #5FA85D; /* Verde orgânico e suave */
+  --cor-erro: #D9534F; /* Vermelho mais contido */
+  --cor-alerta: #E6B800; /* Amarelo ouro para avisos */
+  --cor-info: #5BC0DE; /* Azul suave */
+  --cor-orange: #FFA000; /* Laranja para status "Atenção" (usado em Pedidos.css) */
+  --cor-secondary-card: #F0F4F7; /* Cinza azulado para cards secundários */ /* (usado em Dashboard.css) */
+
+  --sombra-leve: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.1);
+  --sombra-modal: 0 15px 30px rgba(0,0,0,0.3); /* Sombra para modais */
+}
+
+/* Base global */
+body {
+  background-color: var(--cor-fundo-pagina);
+  font-family: 'Georgia', serif;
+  color: var(--cor-texto-principal);
+}
+
+.catalogo-container {
+  padding: 0;
+  padding-bottom: 2.5rem;
+  background-color: var(--cor-fundo-pagina);
+  min-height: calc(100vh - 5rem);
+  font-family: 'Georgia', serif;
+  color: var(--cor-texto-principal);
+}
+
+.catalogo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2.5rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--cor-borda);
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.catalogo-header-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--cor-texto-titulo);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.catalogo-header-title svg {
+  color: var(--cor-primaria);
+  font-size: 3.2rem;
+}
+
+/* Botões de Ação (btn-voltar e btn-primary) */
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  color: var(--cor-texto-secundario);
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.btn-voltar:hover {
+  color: var(--cor-primaria);
+  transform: translateX(-3px);
+}
+.btn-voltar svg {
+  margin-right: 0.5rem;
+  color: var(--cor-texto-secundario);
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  background-color: var(--cor-primaria);
+  color: white;
+  font-weight: 600;
+  padding: 0.8rem 1.8rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--sombra-media);
+}
+.btn-primary:hover {
+  background-color: var(--cor-primaria-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+.btn-primary:disabled {
+  background-color: var(--cor-primaria-claro);
+  color: var(--cor-texto-secundario);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.btn-primary svg {
+  margin-right: 0.6rem;
+}
+
+/* Grid de cards de produtos */
+.produtos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2.5rem;
+}
+
+/* Card individual do produto */
+.produto-card {
+  background-color: var(--cor-card-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 1rem;
+  box-shadow: var(--sombra-card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.produto-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--sombra-card-hover);
+}
+
+.produto-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.produto-card-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--cor-texto-titulo);
+  line-height: 1.3;
+  flex-grow: 1;
+  margin-right: 0.75rem;
+}
+
+.produto-card-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-icon {
+  background: var(--cor-fundo-pagina);
+  border: 1px solid var(--cor-borda);
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.btn-icon:hover {
+  background-color: var(--cor-primaria-claro);
+}
+.btn-icon svg {
+  color: var(--cor-texto-secundario);
+  font-size: 1.2rem;
+}
+.btn-icon.edit:hover svg { color: var(--cor-info); }
+.btn-icon.delete:hover svg { color: var(--cor-erro); }
+
+.produto-details {
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
+
+.produto-details p {
+  font-size: 1rem;
+  color: var(--cor-texto-principal);
+  margin-bottom: 0.3rem;
+}
+.produto-details p strong {
+  color: var(--cor-texto-titulo);
+}
+
+.ingredientes-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  border-top: 1px dashed var(--cor-borda);
+  padding-top: 1rem;
+}
+
+.ingredientes-list-title {
+  font-weight: 600;
+  color: var(--cor-texto-titulo);
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.ingredientes-list li {
+  font-size: 0.95rem;
+  color: var(--cor-texto-secundario);
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+}
+
+/* Seção de valores no rodapé do card */
+.produto-valores {
+  border-top: 1px solid var(--cor-borda);
+  padding-top: 1.5rem;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.produto-valor-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  color: var(--cor-texto-principal);
+}
+
+.produto-valor-item .label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+}
+
+.produto-valor-item .label svg {
+  color: var(--cor-primaria);
+  font-size: 1.2rem;
+}
+
+.produto-valor-item .value {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--cor-texto-titulo);
+}
+
+/* Cores específicas para os valores */
+.valor-custo-total .value { color: #8B4513; }
+.valor-custo-grama .value { color: var(--cor-erro); }
+.valor-preco-unidade .value { color: var(--cor-info); }
+.valor-meu-preco .value { color: var(--cor-sucesso); }
+.valor-lucro-real .value { color: var(--cor-primaria); }
+
+
+/* Mensagem de nenhum produto */
+.no-produtos-message {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: var(--cor-card-fundo);
+  border-radius: 1rem;
+  box-shadow: var(--sombra-card);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 4rem 2.5rem;
+}
+
+.no-produtos-message svg {
+  color: #D3C1B0;
+  margin: 0 auto 1.5rem;
+  font-size: 4rem;
+}
+
+.no-produtos-message h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--cor-texto-titulo);
+  margin-bottom: 0.75rem;
+}
+
+.no-produtos-message p {
+  color: var(--cor-texto-secundario);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+/* Estilos para o Modal de Confirmação */
+.fixed.inset-0 {
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.bg-white.p-8.rounded-lg.shadow-2xl {
+  background-color: var(--cor-card-fundo);
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 28rem;
+  width: 100%;
+  margin: 0 1.5rem;
+  border: 1px solid var(--cor-borda);
+}
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.text-yellow-500 { color: var(--cor-alerta); }
+.mt-4 { margin-top: 1rem; }
+.text-xl { font-size: 1.35rem; }
+.font-bold { font-weight: 700; }
+.text-gray-800 { color: var(--cor-texto-titulo); }
+.mt-2 { margin-top: 0.6rem; }
+.text-gray-600 { color: var(--cor-texto-principal); }
+.text-xs { font-size: 0.8rem; }
+.text-gray-400 { color: var(--cor-texto-secundario); }
+.mt-1 { margin-top: 0.25rem; }
+.mt-8 { margin-top: 2rem; }
+.flex { display: flex; }
+.justify-center { justify-content: center; }
+.gap-4 { gap: 1rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.bg-gray-200 { background-color: #e5e7eb; }
+.text-gray-800 { color: #1f2937; }
+.rounded-md { border-radius: 0.375rem; }
+.hover\:bg-gray-300:hover { background-color: #d1d5db; }
+.font-semibold { font-weight: 600; }
+.bg-red-600 { background-color: var(--cor-erro); }
+.text-white { color: white; }
+.hover\:bg-red-700:hover { background-color: #b91c1c; }
+
+/* Media Queries para Responsividade (adaptadas para as novas escalas) */
+@media (max-width: 1024px) { /* Laptops menores */
+  .catalogo-container {
+      padding: 2rem;
+  }
+  .catalogo-header-title {
+      font-size: 2.2rem;
+  }
+  .catalogo-header-title svg {
+      font-size: 2.5rem;
+  }
+  .produtos-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+  }
+  .produto-card-title {
+      font-size: 1.6rem;
+  }
+  .produto-valor-item .value {
+      font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) { /* Tablets e Mobile */
+  .catalogo-container {
+      padding: 1.5rem;
+  }
+  .catalogo-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+  }
+  .catalogo-header-title {
+      font-size: 1.8rem;
+      text-align: left;
+  }
+  .catalogo-header-title svg {
+      font-size: 2rem;
+  }
+  .btn-primary {
+      width: 100%;
+      justify-content: center;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+  }
+  .produtos-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      padding: 0 1.5rem;
+  }
+  .produto-card {
+      padding: 1.5rem;
+  }
+  .produto-card-title {
+      font-size: 1.4rem;
+  }
+  .produto-details p, .ingredientes-list li {
+      font-size: 0.9rem;
+  }
+  .produto-valor-item {
+      font-size: 1rem;
+  }
+  .produto-valor-item .value {
+      font-size: 1.1rem;
+  }
+  .no-produtos-message {
+      padding: 2.5rem 1rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+  }
+  .no-produtos-message h3 {
+      font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) { /* Celulares menores */
+  .catalogo-container {
+      padding: 1rem;
+  }
+  .catalogo-header-title {
+      font-size: 1.5rem;
+  }
+  .catalogo-header-title svg {
+      font-size: 1.8rem;
+  }
+  .produto-card {
+      padding: 1rem;
+  }
+  .produto-card-title {
+      font-size: 1.25rem;
+  }
+  .produto-details p, .ingredientes-list li {
+      font-size: 0.85rem;
+  }
+  .ingredientes-list-title {
+      font-size: 1rem;
   }
 }
